@@ -75,15 +75,15 @@ app.post("/register", (req, res) => {
                     // console.log(result.rows[0].id);
                     req.session.userId = result.rows[0].id;
                     // console.log("userId cookie: ", req.session.userId);
-                    res.json(result.rows[0]);
+                    res.json({ success: true });
                 })
                 .catch((err) => {
-                    console.log("err in registerUser: ", err);
+                    // console.log("err in registerUser: ", err);
                     res.json({ error: true });
                 });
         })
         .catch((err) => {
-            console.log("err in bcrypt: ", err);
+            // console.log("err in bcrypt: ", err);
         });
 });
 

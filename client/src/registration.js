@@ -32,9 +32,13 @@ export default class Registration extends Component {
                 if (data.error) {
                     this.setState({ error: data.error });
                     // console.log(this.state.error);
+                } else {
+                    location.reload();
                 }
-
-                location.reload();
+            })
+            .catch((err) => {
+                console.log();
+                this.setState({ error: true });
             });
     }
     // TODO:
