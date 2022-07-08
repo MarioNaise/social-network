@@ -1,7 +1,6 @@
 import { Component } from "react";
-import { Link } from "react-router-dom";
 
-export default class Registration extends Component {
+export default class Login extends Component {
     constructor() {
         super();
         this.state = {
@@ -10,17 +9,12 @@ export default class Registration extends Component {
     }
 
     handleChange(e) {
-        this.setState(
-            {
-                [e.target.name]: e.target.value,
-            } //,
-            // () => {
-            //     console.log("this.state", this.state);
-            // }
-        );
+        this.setState({
+            [e.target.name]: e.target.value,
+        });
     }
     handleSubmit() {
-        fetch("/register", {
+        fetch("/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -29,7 +23,7 @@ export default class Registration extends Component {
         })
             .then((resp) => resp.json())
             .then((data) => {
-                // console.log("data from POST / register: ", data);
+                // console.log("data from POST /login: ", data);
                 if (data.error) {
                     this.setState({ error: data.error });
                     // console.log(this.state.error);
@@ -44,27 +38,16 @@ export default class Registration extends Component {
 
     render() {
         return (
-            <div id="register">
-                <h1>Welcome to</h1>
+            <div id="login">
+                <h1>Login</h1>
                 <img className="logo" src="/logo.png" alt="logo" />
                 {this.state.error && (
                     <p className="error">
                         Something went wrong! Please try again.
                     </p>
                 )}
+
                 <div className="form">
-                    <input
-                        type="text"
-                        name="first"
-                        placeholder="first name"
-                        onChange={(e) => this.handleChange(e)}
-                    ></input>
-                    <input
-                        type="text"
-                        name="last"
-                        placeholder="last name"
-                        onChange={(e) => this.handleChange(e)}
-                    ></input>
                     <input
                         type="email"
                         name="email"
@@ -77,12 +60,7 @@ export default class Registration extends Component {
                         placeholder="password"
                         onChange={(e) => this.handleChange(e)}
                     ></input>
-                    <button onClick={() => this.handleSubmit()}>
-                        Register
-                    </button>
-                    <Link className="link" to="/login">
-                        Login
-                    </Link>
+                    <button onClick={() => this.handleSubmit()}>Login</button>
                 </div>
             </div>
         );

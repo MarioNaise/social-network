@@ -1,7 +1,65 @@
-body {
+* {
+    font-family: "EB Garamond", serif;
     background-color: ghostwhite;
 }
 
-a {
+/************** START ***************/
+
+#start {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#start a {
     display: block;
+    color: black;
+}
+
+.form {
+    width: 20%;
+    min-width: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.logo {
+    width: 15em;
+}
+
+.form input,
+.form input:focus,
+.form button {
+    display: block;
+    margin: 1em;
+    outline: none;
+}
+
+.form input {
+    border: none;
+    border-bottom: 2px solid black;
+    text-align: center;
+    padding: 0.5em;
+}
+
+.form button {
+    border: 1px solid black;
+    border-radius: 0.2em;
+    padding: 0.3em 1em;
+}
+.form button:active {
+    background-color: lightgrey;
+}
+
+.link {
+    color: black;
+}
+
+#register,
+#login {
+    margin: 2em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }

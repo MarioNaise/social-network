@@ -83,8 +83,38 @@ app.post("/register", (req, res) => {
                 });
         })
         .catch((err) => {
-            // console.log("err in bcrypt: ", err);
+            console.log("err in bcrypt: ", err);
+            res.json({ error: true });
         });
+});
+
+app.post("/login", (req, res) => {
+    db.loginUser(req.body.email)
+        .then((result) => {
+            if (result.rows[0]) {
+                console.log(result.rows[0]);
+                bcrypt
+                    .compare(req.body.password, result.rows[0].password)
+                    .then((isCorrect) => {
+                        if (isCorrect) {
+                            req.session.userId = result.rows[0].id;
+                            res.json(result.rows[0]);
+                        } else {
+                            res.json({ error: true });
+                        }
+                    })
+                    .catch((err) => {
+                        console.log("err in bcrypt comapre: ", err);
+                        res.json({ error: true });
+                    });
+            } else {
+                res.json({ error: true });
+            }
+        })
+        .catch((err) => {
+            console.log("err in loginUser: ", err);
+            res.json({ error: true });
+        }); //end of catch
 });
 
 ////////////////////////////////////////////////////////
