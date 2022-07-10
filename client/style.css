@@ -1,6 +1,20 @@
+:root {
+    --backgroundDefault: ghostwhite;
+    --backgroundColor: lightblue;
+}
+
 * {
     font-family: "EB Garamond", serif;
-    background-color: ghostwhite;
+    color: black;
+    border-radius: 1em;
+    text-align: center;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--backgroundDefault);
 }
 
 /************** START ***************/
@@ -13,19 +27,19 @@
 
 #start a {
     display: block;
-    color: black;
 }
 
 .form {
-    width: 20%;
-    min-width: 100px;
+    width: 40%;
+    min-width: 300px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: var(--backgroundColor);
 }
 
 .logo {
-    width: 15em;
+    height: 5em;
 }
 
 .form input,
@@ -45,21 +59,30 @@
 
 .form button {
     border: 1px solid black;
-    border-radius: 0.2em;
+    border-radius: 0.8em;
     padding: 0.3em 1em;
 }
 .form button:active {
     background-color: lightgrey;
 }
 
-.link {
-    color: black;
-}
-
+#start,
 #register,
-#login {
+#login,
+#resetPassword {
+    width: 30vw;
+    min-width: 400px;
+    padding: 2em;
     margin: 2em;
     display: flex;
     flex-direction: column;
     align-items: center;
+    border: 1px solid var(--backgroundColor);
+    background-color: var(--backgroundColor);
+    border-radius: 1em;
+}
+
+/************** START ***************/
+#start img {
+    height: 15em;
 }

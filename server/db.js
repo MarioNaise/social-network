@@ -1,5 +1,5 @@
 const spicedPg = require("spiced-pg");
-const database = "socialNetwork";
+const database = "socialnw";
 const username = "postgres";
 const password = "postgres";
 
@@ -21,4 +21,37 @@ module.exports.loginUser = (email) => {
                 WHERE email = $1;`;
     const param = [email];
     return db.query(q, param);
+};
+
+module.exports.insertResetCode = (email, secretCode) => {
+    const q = `INSERT INTO reset_codes (email, code)
+                VALUES ($1, $2);`;
+    const param = [email, secretCode];
+    return db.query(q, param);
+};
+
+module.exports.searchUser = (email) => {
+    return db.query(
+        `SELECT * FROM users
+        WHERE email = $1;`,
+        [email]
+    );
+};
+
+module.exports.searchCode = (email) => {
+    return db.query(
+        `SELECT * FROM reset_codes
+        WHERE CURRENT_TIMESTAMP - created_at < INTERVAL '10 minutes'
+        AND email = $1;`,
+        [email]
+    );
+};
+
+module.exports.updatePassword = (email, password) => {
+    return db.query(
+        `UPDATE users
+        SET password = $2
+        WHERE email = $1;`,
+        [email, password]
+    );
 };

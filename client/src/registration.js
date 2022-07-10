@@ -39,6 +39,7 @@ export default class Registration extends Component {
             })
             .catch((err) => {
                 this.setState({ error: true });
+                console.log("err in POST register: ", err);
             });
     }
 
@@ -47,6 +48,8 @@ export default class Registration extends Component {
             <div id="register">
                 <h1>Welcome to</h1>
                 <img className="logo" src="/logo.png" alt="logo" />
+                <h1>Register</h1>
+
                 {this.state.error && (
                     <p className="error">
                         Something went wrong! Please try again.

@@ -1,4 +1,5 @@
 import { Component } from "react";
+import { Link } from "react-router-dom";
 
 export default class Login extends Component {
     constructor() {
@@ -33,14 +34,15 @@ export default class Login extends Component {
             })
             .catch((err) => {
                 this.setState({ error: true });
+                console.log("err in POST login: ", err);
             });
     }
 
     render() {
         return (
             <div id="login">
-                <h1>Login</h1>
                 <img className="logo" src="/logo.png" alt="logo" />
+                <h1>Login</h1>
                 {this.state.error && (
                     <p className="error">
                         Something went wrong! Please try again.
@@ -61,6 +63,12 @@ export default class Login extends Component {
                         onChange={(e) => this.handleChange(e)}
                     ></input>
                     <button onClick={() => this.handleSubmit()}>Login</button>
+                    <Link className="link" to="/">
+                        Register
+                    </Link>
+                    <Link className="link" to="/password/reset">
+                        Reset your password
+                    </Link>
                 </div>
             </div>
         );
