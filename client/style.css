@@ -17,16 +17,49 @@ body {
     background-color: var(--backgroundDefault);
 }
 
-/************** START ***************/
+.pointer {
+    cursor: pointer;
+}
 
-#start {
+input,
+input:focus,
+button {
+    display: block;
+    margin: 1em;
+    outline: none;
+}
+
+input {
+    border: none;
+    border-bottom: 2px solid black;
+    text-align: center;
+    padding: 0.5em;
+}
+
+button {
+    border: 1px solid black;
+    border-radius: 0.8em;
+    padding: 0.3em 1em;
+    cursor: pointer;
+}
+button:active {
+    background-color: lightgrey;
+}
+
+/************** WELCOME ***************/
+
+#register,
+#login,
+#resetPassword {
+    width: 30vw;
+    min-width: 400px;
+    padding: 2em;
+    margin: 2em;
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-
-#start a {
-    display: block;
+    background-color: var(--backgroundColor);
+    border-radius: 1em;
 }
 
 .form {
@@ -42,34 +75,8 @@ body {
     height: 5em;
 }
 
-.form input,
-.form input:focus,
-.form button {
-    display: block;
-    margin: 1em;
-    outline: none;
-}
-
-.form input {
-    border: none;
-    border-bottom: 2px solid black;
-    text-align: center;
-    padding: 0.5em;
-}
-
-.form button {
-    border: 1px solid black;
-    border-radius: 0.8em;
-    padding: 0.3em 1em;
-}
-.form button:active {
-    background-color: lightgrey;
-}
-
-#start,
-#register,
-#login,
-#resetPassword {
+/************** APP ***************/
+#app {
     width: 30vw;
     min-width: 400px;
     padding: 2em;
@@ -77,12 +84,24 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    border: 1px solid var(--backgroundColor);
     background-color: var(--backgroundColor);
     border-radius: 1em;
 }
 
-/************** START ***************/
-#start img {
+#app img {
     height: 15em;
+}
+
+#app a {
+    display: block;
+}
+
+#app .profilePic {
+    height: 10em;
+    width: 10em;
+}
+
+#app .chooseFile {
+    border-radius: 0;
+    border: none;
 }

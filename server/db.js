@@ -30,7 +30,7 @@ module.exports.insertResetCode = (email, secretCode) => {
     return db.query(q, param);
 };
 
-module.exports.searchUser = (email) => {
+module.exports.findUser = (email) => {
     return db.query(
         `SELECT * FROM users
         WHERE email = $1;`,
@@ -38,11 +38,13 @@ module.exports.searchUser = (email) => {
     );
 };
 
-module.exports.searchCode = (email) => {
+module.exports.findCode = (email) => {
     return db.query(
         `SELECT * FROM reset_codes
         WHERE CURRENT_TIMESTAMP - created_at < INTERVAL '10 minutes'
-        AND email = $1;`,
+        AND email = $1
+        ORDER BY id DESC
+        LIMIT 1;`,
         [email]
     );
 };
@@ -53,5 +55,23 @@ module.exports.updatePassword = (email, password) => {
         SET password = $2
         WHERE email = $1;`,
         [email, password]
+    );
+};
+
+module.exports.getUserInfo = (userId) => {
+    return db.query(
+        `SELECT * FROM users
+        WHERE id = $1;`,
+        [userId]
+    );
+};
+
+module.exports.uploadProfilePicture = (imageUrl, userId) => {
+    return db.query(
+        `UPDATE users
+        SET profile_picture = $1
+        WHERE id = $2
+        RETURNING profile_picture;`,
+        [imageUrl, userId]
     );
 };

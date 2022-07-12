@@ -7,6 +7,9 @@ const bcrypt = require("./bcrypt");
 const cookieSession = require("cookie-session");
 const ses = require("./ses.js");
 const cryptoRandomString = require("crypto-random-string");
+const multer = require("multer");
+const uidSafe = require("uid-safe");
+const s3 = require("./s3");
 
 const COOKIE_SECRET =
     process.env.COOKIE_SECRET || require("./secrets.json").COOKIE_SECRET;
@@ -53,17 +56,28 @@ app.get("/user/id.json", function (req, res) {
     });
 });
 
+app.get("/user/info", (req, res) => {
+    db.getUserInfo(req.session.userId)
+        .then((result) => {
+            res.json({
+                profile: result.rows[0],
+            });
+        })
+        .catch((err) => {
+            console.log("err in getUserInfo: ", err);
+            res.json({
+                error: true,
+            });
+        });
+});
+
 app.get("/logout", (req, res) => {
     req.session = null;
     res.redirect("/");
 });
 
-app.get("*", function (req, res) {
-    res.sendFile(path.join(__dirname, "..", "client", "index.html"));
-});
-
 ////////////////////////////////////////////////////////
-//////////////////// POST ROUTES   /////////////////////
+////////////////////   POST ROUTES   ///////////////////
 ////////////////////////////////////////////////////////
 
 app.post("/register", (req, res) => {
@@ -116,14 +130,14 @@ app.post("/login", (req, res) => {
         .catch((err) => {
             console.log("err in loginUser: ", err);
             res.json({ error: true });
-        }); //end of catch
+        });
 });
 
-app.post("/sendCode", (req, res) => {
+app.post("/password/reset/code", (req, res) => {
     const secretCode = cryptoRandomString({
         length: 6,
     });
-    db.searchUser(req.body.email)
+    db.findUser(req.body.email)
         .then((result) => {
             // console.log(result.rows[0]);
             if (result.rows[0].email) {
@@ -156,15 +170,13 @@ app.post("/sendCode", (req, res) => {
         });
 });
 
-app.post("/reset", (req, res) => {
+app.post("/password/reset", (req, res) => {
     // console.log("req.body", req.body);
     // console.log("resetCode", req.body.resetCode);
-    db.searchCode(req.body.email)
+    db.findCode(req.body.email)
         .then((result) => {
             // console.log("result search code: ", result.rows);
-            if (
-                result.rows[result.rows.length - 1].code === req.body.resetCode
-            ) {
+            if (result.rows[0].code === req.body.resetCode) {
                 // console.log(true);
                 bcrypt
                     .hash(req.body.password)
@@ -191,6 +203,54 @@ app.post("/reset", (req, res) => {
             console.log("err in searchCode: ", err);
             res.json({ error: true });
         });
+});
+
+/////////////////////////////////////////////////////////////////
+//////////////////////   UPLOAD    //////////////////////////////
+/////////////////////////////////////////////////////////////////
+const storage = multer.diskStorage({
+    destination(req, file, callback) {
+        callback(null, path.join(__dirname, "uploads"));
+    },
+    filename(req, file, callback) {
+        const randomFileName = uidSafe(24).then((randomString) => {
+            callback(null, randomString + path.extname(file.originalname));
+        });
+    },
+});
+
+const uploader = multer({
+    storage,
+    limits: {
+        fileSize: 2097152,
+    },
+});
+
+app.post(
+    "/upload/profile/picture",
+    uploader.single("image"),
+    s3.upload,
+    (req, res) => {
+        // console.log("req.file in server.js: ", req.file);
+        db.uploadProfilePicture(
+            "https://s3.amazonaws.com/spicedling/" + req.file.filename,
+            req.session.userId
+        )
+            .then((result) => {
+                newImage = result.rows[0];
+                res.json({
+                    newImage,
+                });
+            })
+            .catch((err) => {
+                console.log("err in uploadImage", err);
+                res.json({ error: true });
+            });
+    }
+);
+
+app.get("*", function (req, res) {
+    res.sendFile(path.join(__dirname, "..", "client", "index.html"));
 });
 
 ////////////////////////////////////////////////////////

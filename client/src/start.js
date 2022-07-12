@@ -1,5 +1,6 @@
 import ReactDOM from "react-dom";
 import Welcome from "./welcome.js";
+import App from "./app.js";
 
 fetch("/user/id.json")
     .then((response) => response.json())
@@ -7,12 +8,6 @@ fetch("/user/id.json")
         if (!data.userId) {
             ReactDOM.render(<Welcome />, document.querySelector("main"));
         } else {
-            ReactDOM.render(
-                <div id="start">
-                    <img className="logo" src="/logo.png" alt="logo" />
-                    <a href="/logout">Logout</a>
-                </div>,
-                document.querySelector("main")
-            );
+            ReactDOM.render(<App />, document.querySelector("main"));
         }
     });

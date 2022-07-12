@@ -16,7 +16,7 @@ export default class ResetPassword extends Component {
     }
 
     sendCode() {
-        fetch("/sendCode", {
+        fetch("/password/reset/code", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -38,7 +38,7 @@ export default class ResetPassword extends Component {
             });
     }
     resetPassword() {
-        fetch("/reset", {
+        fetch("/password/reset", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
