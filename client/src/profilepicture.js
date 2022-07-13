@@ -3,13 +3,15 @@
 //     return <h2> Hello {props.first}</h2>;
 // }
 
-export default function ProfilePicture({ first, last, imageUrl }) {
+export default function ProfilePicture({ first, last, imageUrl, toggleModal }) {
     imageUrl = imageUrl || "defaultProfilePic.jpg";
 
     return (
-        <div id="profilePicture">
-            <h1> Hello {first + " " + last}</h1>
-            <img className="profilePic" src={imageUrl} alt={first + last} />
-        </div>
+        <img
+            onClick={() => toggleModal()}
+            className="profilePic"
+            src={imageUrl}
+            alt={first + last}
+        />
     );
 }

@@ -1,5 +1,6 @@
 import { Component } from "react";
 import { Link } from "react-router-dom";
+import Logo from "./logo";
 
 export default class Login extends Component {
     constructor() {
@@ -41,7 +42,7 @@ export default class Login extends Component {
     render() {
         return (
             <div id="login">
-                <img className="logo" src="/logo.png" alt="logo" />
+                <Logo />
                 <h1>Login</h1>
                 {this.state.error && (
                     <p className="error">
@@ -63,10 +64,10 @@ export default class Login extends Component {
                         onChange={(e) => this.handleChange(e)}
                     ></input>
                     <button onClick={() => this.handleSubmit()}>Login</button>
-                    <Link className="link" to="/">
+                    <Link className="link pointer" to="/">
                         Register
                     </Link>
-                    <Link className="link" to="/password/reset">
+                    <Link className="link pointer" to="/password/reset">
                         Reset your password
                     </Link>
                 </div>

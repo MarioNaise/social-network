@@ -7,7 +7,8 @@ DROP TABLE IF EXISTS reset_codes;
        last VARCHAR NOT NULL CHECK (last != ''),
        email VARCHAR NOT NULL UNIQUE CHECK (email != ''),
        password VARCHAR NOT NULL CHECK (password != ''),
-       profile_picture VARCHAR
+       profile_picture VARCHAR,
+       bio Text
    );
 
 CREATE TABLE reset_codes (

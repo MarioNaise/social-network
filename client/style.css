@@ -1,13 +1,16 @@
 :root {
     --backgroundDefault: ghostwhite;
     --backgroundColor: lightblue;
+    --borderColor: black;
 }
 
 * {
-    font-family: "EB Garamond", serif;
+    font-family: "Dancing Script", cursive;
     color: black;
-    border-radius: 1em;
     text-align: center;
+    margin: 0;
+    padding: 0;
+    cursor: default;
 }
 
 body {
@@ -15,6 +18,14 @@ body {
     flex-direction: column;
     align-items: center;
     background-color: var(--backgroundDefault);
+}
+
+main {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .pointer {
@@ -32,6 +43,7 @@ button {
 input {
     border: none;
     border-bottom: 2px solid black;
+    border-radius: 0.8em;
     text-align: center;
     padding: 0.5em;
 }
@@ -63,12 +75,10 @@ button:active {
 }
 
 .form {
-    width: 40%;
     min-width: 300px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: var(--backgroundColor);
 }
 
 .logo {
@@ -76,32 +86,92 @@ button:active {
 }
 
 /************** APP ***************/
+
 #app {
-    width: 30vw;
+    width: 100vw;
+    height: 100vh;
     min-width: 400px;
-    padding: 2em;
-    margin: 2em;
+    padding: 0;
+    margin: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: var(--backgroundColor);
-    border-radius: 1em;
+    background-color: var(--backgroundDefault);
 }
 
-#app img {
-    height: 15em;
-}
-
-#app a {
+#app h1,
+a,
+p {
+    margin: 1em 0;
     display: block;
 }
 
+#app h3 {
+    margin: 1em;
+}
+
 #app .profilePic {
-    height: 10em;
-    width: 10em;
+    height: 5em;
+    width: 5em;
+    object-fit: cover;
+    position: absolute;
+    top: 1em;
+    right: 1em;
+    margin: 0;
+    border-radius: 1em;
+}
+
+#app .logo {
+    height: 5em;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 #app .chooseFile {
-    border-radius: 0;
     border: none;
+    width: 70%;
+}
+
+.uploader {
+    background-color: var(--backgroundColor);
+    border-radius: 0.8em;
+}
+
+.logout {
+    position: fixed;
+    bottom: 1em;
+    right: 2em;
+}
+
+.profile {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    align-self: flex-start;
+    width: 90vw;
+    margin: 1em;
+    background-color: var(--backgroundColor);
+    border-radius: 0.8em;
+}
+
+.profile img {
+    height: 20em;
+    margin: 1em;
+}
+
+#bio {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: large;
+    margin: 1em;
+}
+
+#bio label {
+    margin-bottom: 0.5em;
+}
+
+#bio button {
+    margin: 1em 0;
 }

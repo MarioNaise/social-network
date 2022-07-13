@@ -1,6 +1,8 @@
 import { Component } from "react";
 import ProfilePicture from "./profilepicture.js";
 import Uploader from "./uploader.js";
+import Logo from "./logo";
+import Profile from "./profile";
 
 export default class App extends Component {
     constructor() {
@@ -8,8 +10,10 @@ export default class App extends Component {
         this.state = {
             first: "",
             last: "",
-            imageUrl: "",
+            imageUrl: "defaultProfilePic.jpg",
+            bio: ``,
             uploaderIsVisible: false,
+            profileIsVisible: true,
         };
     }
 
@@ -19,6 +23,7 @@ export default class App extends Component {
         // first name, last name, profile picture url (we dont have yet)
         // when we have the info from the server, add it to the state of this
         // component with this.setState
+        history.replaceState({}, "", "/");
         fetch("/user/info")
             .then((resp) => resp.json())
             .then((data) => {
@@ -27,7 +32,11 @@ export default class App extends Component {
                     first: data.profile.first,
                     last: data.profile.last,
                     imageUrl: data.profile.profile_picture,
-                });
+                    bio: data.profile.bio,
+                }),
+                    () => {
+                        console.log("this.state", this.state);
+                    };
             })
             .catch((err) => {
                 console.log("err in fetch user/info: ", err);
@@ -37,42 +46,48 @@ export default class App extends Component {
     toggleModal() {
         this.setState({
             uploaderIsVisible: !this.state.uploaderIsVisible,
+            profileIsVisible: !this.state.profileIsVisible,
         });
     }
 
-    submitInApp(e) {
-        fetch("/upload/profile/picture", {
-            method: "POST",
-            body: new FormData(e.target),
-        })
-            .then((resp) => resp.json())
-            .then((data) => {
-                // console.log("data uploader.js", data.newImage);
-                // this.setState didnt work, error -> "_this3.setState is not a function"????????????????????????
-                location.reload();
-            })
-            .catch((err) => {
-                console.log("err in submitInApp", err);
-            });
+    submitInApp(imageUrl) {
+        this.setState({
+            imageUrl: imageUrl,
+            uploaderIsVisible: false,
+            profileIsVisible: true,
+        });
     }
 
     render() {
         return (
             <div id="app">
-                <img className="logo" src="/logo.png" alt="logo" />
+                <Logo />
                 <ProfilePicture
                     first={this.state.first}
                     last={this.state.last}
                     imageUrl={this.state.imageUrl}
+                    toggleModal={() => this.toggleModal()}
                 />
-                <p className="pointer" onClick={() => this.toggleModal()}>
-                    Click here to change your profile picture!
-                </p>
+                <h1>Hello {this.state.first}!</h1>
 
                 {this.state.uploaderIsVisible && (
-                    <Uploader submitInApp={this.submitInApp} />
+                    <Uploader
+                        submitInApp={(url) => {
+                            this.submitInApp(url);
+                        }}
+                    />
                 )}
-                <a href="/logout">Logout</a>
+                {this.state.profileIsVisible && (
+                    <Profile
+                        first={this.state.first}
+                        last={this.state.last}
+                        imageUrl={this.state.imageUrl}
+                        bio={this.state.bio}
+                    />
+                )}
+                <a className="logout pointer" href="/logout">
+                    Logout
+                </a>
             </div>
         );
     }

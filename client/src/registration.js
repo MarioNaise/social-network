@@ -1,5 +1,6 @@
 import { Component } from "react";
 import { Link } from "react-router-dom";
+import Logo from "./logo";
 
 export default class Registration extends Component {
     constructor() {
@@ -47,7 +48,7 @@ export default class Registration extends Component {
         return (
             <div id="register">
                 <h1>Welcome to</h1>
-                <img className="logo" src="/logo.png" alt="logo" />
+                <Logo />
                 <h1>Register</h1>
 
                 {this.state.error && (
@@ -83,7 +84,7 @@ export default class Registration extends Component {
                     <button onClick={() => this.handleSubmit()}>
                         Register
                     </button>
-                    <Link className="link" to="/login">
+                    <Link className="link pointer" to="/login">
                         Login
                     </Link>
                 </div>

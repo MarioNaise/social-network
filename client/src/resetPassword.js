@@ -1,5 +1,6 @@
 import { Component } from "react";
 import { Link } from "react-router-dom";
+import Logo from "./logo";
 
 export default class ResetPassword extends Component {
     constructor() {
@@ -64,7 +65,7 @@ export default class ResetPassword extends Component {
         if (this.state.view === 1) {
             return (
                 <div id="resetPassword">
-                    <img className="logo" src="/logo.png" alt="logo" />
+                    <Logo />
                     <h1>Reset your password</h1>
                     {this.state.error && (
                         <p className="error">
@@ -79,10 +80,10 @@ export default class ResetPassword extends Component {
                             onChange={(e) => this.handleChange(e)}
                         ></input>
                         <button onClick={() => this.sendCode()}>Reset</button>
-                        <Link className="link" to="/">
+                        <Link className="link pointer" to="/">
                             Register
                         </Link>
-                        <Link className="link" to="/login">
+                        <Link className="link pointer" to="/login">
                             Login
                         </Link>
                     </div>
@@ -98,6 +99,10 @@ export default class ResetPassword extends Component {
                             Something went wrong! Please try again.
                         </p>
                     )}
+                    <p>
+                        Please enter the reset code you received per email
+                        within the next 10 minutes.
+                    </p>
                     <div className="form">
                         <input
                             type="text"
