@@ -249,6 +249,16 @@ app.post(
     }
 );
 
+app.post("/upload/profile/bio", (req, res) => {
+    db.updateBio(req.session.userId, req.body.bio)
+        .then((result) => {
+            res.json(result.rows[0]);
+        })
+        .catch((err) => {
+            console.log("err in updateBio", err);
+        });
+});
+
 app.get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "..", "client", "index.html"));
 });

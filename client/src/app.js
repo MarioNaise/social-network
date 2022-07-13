@@ -58,6 +58,13 @@ export default class App extends Component {
         });
     }
 
+    submitBioInApp(bio) {
+        // console.log("bio in app: ", bio);
+        this.setState({
+            bio: bio,
+        });
+    }
+
     render() {
         return (
             <div id="app">
@@ -83,6 +90,9 @@ export default class App extends Component {
                         last={this.state.last}
                         imageUrl={this.state.imageUrl}
                         bio={this.state.bio}
+                        submitBioInApp={(bio) => {
+                            this.submitBioInApp(bio);
+                        }}
                     />
                 )}
                 <a className="logout pointer" href="/logout">

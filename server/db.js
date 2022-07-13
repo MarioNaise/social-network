@@ -75,3 +75,13 @@ module.exports.uploadProfilePicture = (imageUrl, userId) => {
         [imageUrl, userId]
     );
 };
+
+module.exports.updateBio = (userId, bio) => {
+    return db.query(
+        `UPDATE users
+        SET bio = $2
+        WHERE id = $1
+        RETURNING bio;`,
+        [userId, bio]
+    );
+};

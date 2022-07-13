@@ -1,4 +1,5 @@
 import { Component } from "react";
+import BioEditor from "./bioEditor";
 
 export default class Profile extends Component {
     constructor(props) {
@@ -17,14 +18,12 @@ export default class Profile extends Component {
                     src={this.props.imageUrl || "defaultProfilePic.jpg"}
                     alt={this.props.first + this.props.last}
                 />
-
-                {(this.props.bio && (
-                    <p id="bio">
-                        <label>Bio:</label>
-                        <section>{this.props.bio}</section>
-                        <button>Edit Bio</button>
-                    </p>
-                )) || <button>Add Bio</button>}
+                <BioEditor
+                    bio={this.props.bio}
+                    submitBioInApp={(bio) => {
+                        this.props.submitBioInApp(bio);
+                    }}
+                />
             </div>
         );
     }

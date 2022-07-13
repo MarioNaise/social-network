@@ -140,8 +140,8 @@ p {
 
 .logout {
     position: fixed;
-    bottom: 1em;
-    right: 2em;
+    bottom: 0;
+    right: 1em;
 }
 
 .profile {
@@ -160,18 +160,28 @@ p {
     margin: 1em;
 }
 
-#bio {
+#bioText {
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    font-size: large;
+    font-size: 20px;
     margin: 1em;
+    padding: 1em;
+    border-top: 1px solid var(--borderColor);
+    border-bottom: 1px solid var(--borderColor);
 }
 
-#bio label {
+#bioText label {
     margin-bottom: 0.5em;
 }
 
-#bio button {
+#bioText button,
+textarea {
     margin: 1em 0;
+}
+#bioText textarea {
+    text-align: left;
+    padding: 5px;
+    font-size: 20px;
 }
