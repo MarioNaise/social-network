@@ -9,10 +9,10 @@ export default class Profile extends Component {
 
     render() {
         return (
-            <div className="profile">
-                <h3>
+            <div id="profile" className="flexStart">
+                <h1>
                     {this.props.first} {this.props.last}
-                </h3>
+                </h1>
 
                 <img
                     src={this.props.imageUrl || "defaultProfilePic.jpg"}
@@ -24,6 +24,9 @@ export default class Profile extends Component {
                         this.props.submitBioInApp(bio);
                     }}
                 />
+                <a className="link logout pointer" href="/logout">
+                    Logout
+                </a>
             </div>
         );
     }

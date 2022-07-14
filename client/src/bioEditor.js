@@ -9,6 +9,12 @@ export default class BioEditor extends Component {
         };
     }
 
+    saveCurrentBio() {
+        this.setState({
+            draftBio: this.props.bio,
+        });
+    }
+
     toggleBioEditor() {
         this.setState({
             editorIsVisible: !this.setState.editorIsVisible,
@@ -43,11 +49,12 @@ export default class BioEditor extends Component {
     }
     render() {
         return (
-            <div className="bio">
+            <div>
                 {(this.state.editorIsVisible && (
-                    <div id="bioText">
+                    <div id="bioText" className="flexStart">
                         <label>Bio:</label>
                         <textarea
+                            id="bioTextarea"
                             onChange={(e) => this.handleChange(e)}
                             rows="5"
                             cols="50"
@@ -57,15 +64,20 @@ export default class BioEditor extends Component {
                     </div>
                 )) ||
                     (this.props.bio && (
-                        <div id="bioText">
+                        <div id="bioText" className="flexStart">
                             <label>Bio:</label>
                             <p>{this.props.bio}</p>
-                            <button onClick={() => this.toggleBioEditor()}>
+                            <button
+                                onClick={() => {
+                                    this.toggleBioEditor();
+                                    this.saveCurrentBio();
+                                }}
+                            >
                                 Edit Bio
                             </button>
                         </div>
                     )) || (
-                        <div id="bioText">
+                        <div id="bioText" className="flexStart">
                             <button onClick={() => this.toggleBioEditor()}>
                                 Add Bio
                             </button>

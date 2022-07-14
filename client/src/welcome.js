@@ -5,9 +5,9 @@ import ResetPassword from "./resetPassword";
 
 export default function Welcome() {
     return (
-        <div>
+        <div id="welcome">
             <BrowserRouter>
-                <div>
+                <div className="container flex">
                     <Route exact path="/">
                         <Registration />
                     </Route>

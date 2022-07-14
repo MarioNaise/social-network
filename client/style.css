@@ -1,31 +1,34 @@
 :root {
     --backgroundDefault: ghostwhite;
+    --backgroundHeader: lightblue;
+    --backgroundNav: lightblue;
     --backgroundColor: lightblue;
     --borderColor: black;
 }
 
 * {
     font-family: "Dancing Script", cursive;
-    color: black;
+    color: rgb(36, 34, 34);
     text-align: center;
     margin: 0;
     padding: 0;
+    text-decoration: none;
     cursor: default;
 }
 
 body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     background-color: var(--backgroundDefault);
 }
 
+button,
+input {
+    font-size: 1rem;
+}
+
 main {
-    height: 100vh;
+    min-height: 100vh;
     width: 100vw;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    background-color: var(--backgroundDefault);
 }
 
 .pointer {
@@ -36,16 +39,17 @@ input,
 input:focus,
 button {
     display: block;
-    margin: 1em;
     outline: none;
 }
 
 input {
     border: none;
     border-bottom: 2px solid black;
-    border-radius: 0.8em;
+    border-radius: 0.8rem;
     text-align: center;
-    padding: 0.5em;
+    padding: 0.5rem;
+    font-size: 1rem;
+    margin: 0.5em 0;
 }
 
 button {
@@ -53,135 +57,160 @@ button {
     border-radius: 0.8em;
     padding: 0.3em 1em;
     cursor: pointer;
+    font-size: 1rem;
+    margin: 0.5em 0;
 }
 button:active {
     background-color: lightgrey;
-}
-
-/************** WELCOME ***************/
-
-#register,
-#login,
-#resetPassword {
-    width: 30vw;
-    min-width: 400px;
-    padding: 2em;
-    margin: 2em;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: var(--backgroundColor);
-    border-radius: 1em;
-}
-
-.form {
-    min-width: 300px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 }
 
 .logo {
     height: 5em;
 }
 
-/************** APP ***************/
-
-#app {
-    width: 100vw;
-    height: 100vh;
-    min-width: 400px;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: var(--backgroundDefault);
+.link {
+    font-size: 1.2rem;
+    font-family: "Edu VIC WA NT Beginner", cursive;
+    text-decoration: underline;
 }
 
-#app h1,
-a,
-p {
-    margin: 1em 0;
-    display: block;
-}
-
-#app h3 {
-    margin: 1em;
-}
-
-#app .profilePic {
-    height: 5em;
-    width: 5em;
-    object-fit: cover;
-    position: absolute;
-    top: 1em;
-    right: 1em;
-    margin: 0;
-    border-radius: 1em;
-}
-
-#app .logo {
-    height: 5em;
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-
-#app .chooseFile {
+.chooseFile {
     border: none;
     width: 70%;
 }
 
-.uploader {
+.flex,
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.flexStart {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+/**************************************/
+/************** WELCOME ***************/
+/**************************************/
+
+#welcomeHeadline {
+    font-size: 3em;
+}
+
+#welcome .container {
+    width: 30vw;
+    min-width: 400px;
+    padding: 2em;
+    margin: 2em;
     background-color: var(--backgroundColor);
-    border-radius: 0.8em;
+    border-radius: 1em;
+}
+
+
+/**********************************/
+/************** APP ***************/
+/**********************************/
+
+#app {
+    min-width: 400px;
+    padding: 0;
+    margin: 0;
+    background-color: var(--backgroundDefault);
+}
+
+/************** HEADER ***************/
+
+#app header {
+    width: 100vw;
+    display: flex;
+    justify-content: space-between;
+    font-size: 1rem;
+    background-color: var(--backgroundHeader);
+}
+
+#app header * {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+#app .logo {
+    height: 5rem;
+}
+
+#app .profilePic {
+    height: 5rem;
+    width: 5rem;
+    object-fit: cover;
+    border-radius: 1rem;
+    margin: 1rem;
+}
+
+/************** NAV ***************/
+
+#app nav {
+    width: 100vw;
+    background-color: var(--backgroundNav);
+    border: 1px solid var(--borderColor);
+}
+#app nav * {
+    padding: 0.5rem 1rem;
+    border-left: 1px solid var(--borderColor);
+    border-right: 1px solid var(--borderColor);
+}
+
+/************** PROFILE ***************/
+
+#profile,
+#uploader {
+    width: 100vw;
+    background-color: var(--backgroundColor);
+    position: relative;
+}
+
+#profile *,
+#uploader * {
+    margin: 1rem;
+}
+
+#profile img {
+    height: 20rem;
+    border-radius: 1rem;
 }
 
 .logout {
-    position: fixed;
-    bottom: 0;
-    right: 1em;
+    position: absolute;
+    top: 0;
+    right: 0;
 }
 
-.profile {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    align-self: flex-start;
-    width: 90vw;
-    margin: 1em;
-    background-color: var(--backgroundColor);
-    border-radius: 0.8em;
-}
-
-.profile img {
-    height: 20em;
-    margin: 1em;
-}
+/************** BIO ***************/
 
 #bioText {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    font-size: 20px;
-    margin: 1em;
-    padding: 1em;
+    font-size: 1.5em;
     border-top: 1px solid var(--borderColor);
     border-bottom: 1px solid var(--borderColor);
 }
 
-#bioText label {
-    margin-bottom: 0.5em;
+#bioText * {
+    margin: 0.5em 0;
 }
 
-#bioText button,
+#bioText label,
+p,
 textarea {
-    margin: 1em 0;
+    font-family: "Edu VIC WA NT Beginner", cursive;
 }
+
+#bioText label {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
 #bioText textarea {
     text-align: left;
     padding: 5px;
-    font-size: 20px;
+    font-size: 1em;
 }

@@ -1,8 +1,10 @@
 import { Component } from "react";
+import { BrowserRouter, Route, Switch, Link } from "react-router-dom";
 import ProfilePicture from "./profilepicture.js";
 import Uploader from "./uploader.js";
 import Logo from "./logo";
 import Profile from "./profile";
+import FindUsers from "./findUsers";
 
 export default class App extends Component {
     constructor() {
@@ -11,7 +13,7 @@ export default class App extends Component {
             first: "",
             last: "",
             imageUrl: "defaultProfilePic.jpg",
-            bio: ``,
+            bio: "",
             uploaderIsVisible: false,
             profileIsVisible: true,
         };
@@ -23,7 +25,6 @@ export default class App extends Component {
         // first name, last name, profile picture url (we dont have yet)
         // when we have the info from the server, add it to the state of this
         // component with this.setState
-        history.replaceState({}, "", "/");
         fetch("/user/info")
             .then((resp) => resp.json())
             .then((data) => {
@@ -33,10 +34,7 @@ export default class App extends Component {
                     last: data.profile.last,
                     imageUrl: data.profile.profile_picture,
                     bio: data.profile.bio,
-                }),
-                    () => {
-                        console.log("this.state", this.state);
-                    };
+                });
             })
             .catch((err) => {
                 console.log("err in fetch user/info: ", err);
@@ -67,37 +65,57 @@ export default class App extends Component {
 
     render() {
         return (
-            <div id="app">
-                <Logo />
-                <ProfilePicture
-                    first={this.state.first}
-                    last={this.state.last}
-                    imageUrl={this.state.imageUrl}
-                    toggleModal={() => this.toggleModal()}
-                />
-                <h1>Hello {this.state.first}!</h1>
+            <div id="app" className="flex">
+                <BrowserRouter>
+                    <header>
+                        <Logo />
+                        <h1>Hello {this.state.first}!</h1>
+                        <ProfilePicture
+                            first={this.state.first}
+                            last={this.state.last}
+                            imageUrl={this.state.imageUrl}
+                            toggleModal={() => this.toggleModal()}
+                        />
+                    </header>
 
-                {this.state.uploaderIsVisible && (
-                    <Uploader
-                        submitInApp={(url) => {
-                            this.submitInApp(url);
-                        }}
-                    />
-                )}
-                {this.state.profileIsVisible && (
-                    <Profile
-                        first={this.state.first}
-                        last={this.state.last}
-                        imageUrl={this.state.imageUrl}
-                        bio={this.state.bio}
-                        submitBioInApp={(bio) => {
-                            this.submitBioInApp(bio);
-                        }}
-                    />
-                )}
-                <a className="logout pointer" href="/logout">
-                    Logout
-                </a>
+                    <Switch>
+                        <Route exact path="/">
+                            <nav className="flexStart">
+                                <Link className="link pointer" to="/users/find">
+                                    Find Users
+                                </Link>
+                            </nav>
+
+                            {this.state.uploaderIsVisible && (
+                                <Uploader
+                                    submitInApp={(url) => {
+                                        this.submitInApp(url);
+                                    }}
+                                />
+                            )}
+                            {this.state.profileIsVisible && (
+                                <Profile
+                                    first={this.state.first}
+                                    last={this.state.last}
+                                    imageUrl={this.state.imageUrl}
+                                    bio={this.state.bio}
+                                    submitBioInApp={(bio) => {
+                                        this.submitBioInApp(bio);
+                                    }}
+                                />
+                            )}
+                        </Route>
+                        <Route path="/users/find">
+                            <nav className="flexStart">
+                                <Link className="link pointer" to="/">
+                                    Profile
+                                </Link>
+                            </nav>
+
+                            <FindUsers />
+                        </Route>
+                    </Switch>
+                </BrowserRouter>
             </div>
         );
     }

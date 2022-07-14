@@ -30,7 +30,7 @@ export default class Login extends Component {
                     this.setState({ error: data.error });
                     // console.log(this.state.error);
                 } else {
-                    location.reload();
+                    location.replace("/");
                 }
             })
             .catch((err) => {
@@ -43,7 +43,7 @@ export default class Login extends Component {
         return (
             <div id="login">
                 <Logo />
-                <h1>Login</h1>
+                <h1>Login:</h1>
                 {this.state.error && (
                     <p className="error">
                         Something went wrong! Please try again.
@@ -64,6 +64,7 @@ export default class Login extends Component {
                         onChange={(e) => this.handleChange(e)}
                     ></input>
                     <button onClick={() => this.handleSubmit()}>Login</button>
+
                     <Link className="link pointer" to="/">
                         Register
                     </Link>

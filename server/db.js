@@ -85,3 +85,23 @@ module.exports.updateBio = (userId, bio) => {
         [userId, bio]
     );
 };
+
+module.exports.findUsers = (val) => {
+    return db.query(
+        `SELECT first, last, profile_picture, bio, email
+        FROM users
+        WHERE first ILIKE $1
+        OR last ILIKE $1
+        LIMIT 4;`,
+        [val + "%"]
+    );
+};
+
+module.exports.findNewUsers = () => {
+    return db.query(
+        `SELECT first, last, profile_picture, bio, email
+        FROM users
+        ORDER BY id DESC
+        LIMIT 4;`
+    );
+};

@@ -66,7 +66,7 @@ export default class ResetPassword extends Component {
             return (
                 <div id="resetPassword">
                     <Logo />
-                    <h1>Reset your password</h1>
+                    <h1>Reset your password:</h1>
                     {this.state.error && (
                         <p className="error">
                             Something went wrong! Please try again.
@@ -93,7 +93,7 @@ export default class ResetPassword extends Component {
             return (
                 <div id="resetPassword">
                     <img className="logo" src="/logo.png" alt="logo" />
-                    <h1>Reset your password</h1>
+                    <h1>Reset your password:</h1>
                     {this.state.error && (
                         <p className="error">
                             Something went wrong! Please try again.

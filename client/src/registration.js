@@ -47,10 +47,9 @@ export default class Registration extends Component {
     render() {
         return (
             <div id="register">
-                <h1>Welcome to</h1>
+                <h1 id="welcomeHeadline">Welcome to</h1>
                 <Logo />
-                <h1>Register</h1>
-
+                <h1>Register:</h1>
                 {this.state.error && (
                     <p className="error">
                         Something went wrong! Please try again.
@@ -81,9 +80,10 @@ export default class Registration extends Component {
                         placeholder="password"
                         onChange={(e) => this.handleChange(e)}
                     ></input>
-                    <button onClick={() => this.handleSubmit()}>
-                        Register
-                    </button>
+
+                        <button onClick={() => this.handleSubmit()}>
+                            Register
+                        </button>
                     <Link className="link pointer" to="/login">
                         Login
                     </Link>
