@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 export default function FindUsers() {
     const [users, setUsers] = useState([]);
@@ -8,15 +9,14 @@ export default function FindUsers() {
         let abort = false;
         (async () => {
             try {
-                console.log("searchInput right now", searchInput);
+                // console.log("searchInput right now", searchInput);
                 const respBody = await fetch("/findusers/" + searchInput);
                 const data = await respBody.json();
-                console.log("data: ", data);
+                // console.log("data: ", data);
                 if (!abort) {
                     setUsers(data);
-                    console.log("users: ", users);
                 } else {
-                    console.log("ignore don't run a state update");
+                    // console.log("ignore don't run a state update");
                 }
             } catch (err) {
                 console.log("err on fetch");
@@ -25,18 +25,32 @@ export default function FindUsers() {
         return () => {
             // this function runs, whenever there is another useEffect that gets
             // triggered after the initial one
-            console.log("cleanup running");
+            // console.log("cleanup running");
             abort = true;
         };
     }, [searchInput]);
 
     return (
-        <div id="findUser">
+        <div id="findUsers" className="flex">
             <h3> Find other people:</h3>
             <input
                 placeholder="Enter Name"
-                onChange={(e) => setSearchInput(e.target.value)}
+                onChange={(e) => {
+                    setSearchInput(e.target.value);
+                }}
             ></input>
+            <ul>
+                {users?.map((user, i) => {
+                    return (
+                        <li key={i}>
+                            <Link to={`/user/${user.id}`}>
+                                <img src={user.profile_picture}></img>
+                                <p>{`${user.first} ${user.last}`}</p>
+                            </Link>
+                        </li>
+                    );
+                })}
+            </ul>
         </div>
     );
 }

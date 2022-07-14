@@ -4,6 +4,7 @@ import ProfilePicture from "./profilepicture.js";
 import Uploader from "./uploader.js";
 import Logo from "./logo";
 import Profile from "./profile";
+import OtherProfile from "./otherProfile";
 import FindUsers from "./findUsers";
 
 export default class App extends Component {
@@ -68,7 +69,9 @@ export default class App extends Component {
             <div id="app" className="flex">
                 <BrowserRouter>
                     <header>
-                        <Logo />
+                        <Link to="/">
+                            <Logo />
+                        </Link>
                         <h1>Hello {this.state.first}!</h1>
                         <ProfilePicture
                             first={this.state.first}
@@ -113,6 +116,9 @@ export default class App extends Component {
                             </nav>
 
                             <FindUsers />
+                        </Route>
+                        <Route path="/user/:userId">
+                            <OtherProfile />
                         </Route>
                     </Switch>
                 </BrowserRouter>

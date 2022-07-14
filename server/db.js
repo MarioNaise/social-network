@@ -88,7 +88,7 @@ module.exports.updateBio = (userId, bio) => {
 
 module.exports.findUsers = (val) => {
     return db.query(
-        `SELECT first, last, profile_picture, bio, email
+        `SELECT first, last, profile_picture, bio, email, id
         FROM users
         WHERE first ILIKE $1
         OR last ILIKE $1
@@ -99,7 +99,7 @@ module.exports.findUsers = (val) => {
 
 module.exports.findNewUsers = () => {
     return db.query(
-        `SELECT first, last, profile_picture, bio, email
+        `SELECT first, last, profile_picture, bio, email, id
         FROM users
         ORDER BY id DESC
         LIMIT 4;`

@@ -1,13 +1,15 @@
 :root {
     --backgroundDefault: ghostwhite;
-    --backgroundHeader: lightblue;
-    --backgroundNav: lightblue;
-    --backgroundColor: lightblue;
+    --backgroundNav: #ffeec8;
+    --backgroundHeader: #94c4f7;
+    --backgroundColor: #c4def9;
     --borderColor: black;
+    --fontDefault: "Dancing Script", cursive;
+    --fontSansserif: "Raleway", sans-serif;
 }
 
 * {
-    font-family: "Dancing Script", cursive;
+    font-family: var(--fontDefault);
     color: rgb(36, 34, 34);
     text-align: center;
     margin: 0;
@@ -59,6 +61,7 @@ button {
     cursor: pointer;
     font-size: 1rem;
     margin: 0.5em 0;
+    font-family: var(--fontSansserif);
 }
 button:active {
     background-color: lightgrey;
@@ -69,14 +72,14 @@ button:active {
 }
 
 .link {
-    font-size: 1.2rem;
-    font-family: "Edu VIC WA NT Beginner", cursive;
+    font-size: 1rem;
+    font-family: var(--fontSansserif);
     text-decoration: underline;
 }
 
 .chooseFile {
     border: none;
-    width: 70%;
+    width: 80%;
 }
 
 .flex,
@@ -109,6 +112,9 @@ button:active {
     border-radius: 1em;
 }
 
+#welcome .link {
+    margin: 0.5rem 0;
+}
 
 /**********************************/
 /************** APP ***************/
@@ -164,8 +170,10 @@ button:active {
 /************** PROFILE ***************/
 
 #profile,
-#uploader {
+#uploader,
+#findUsers {
     width: 100vw;
+    min-height: 80vh;
     background-color: var(--backgroundColor);
     position: relative;
 }
@@ -173,6 +181,7 @@ button:active {
 #profile *,
 #uploader * {
     margin: 1rem;
+    font-family: var(--fontSansserif);
 }
 
 #profile img {
@@ -189,23 +198,23 @@ button:active {
 /************** BIO ***************/
 
 #bioText {
-    font-size: 1.5em;
+    font-size: 1rem;
     border-top: 1px solid var(--borderColor);
     border-bottom: 1px solid var(--borderColor);
 }
 
 #bioText * {
-    margin: 0.5em 0;
+    margin: 0.5rem 0;
 }
 
 #bioText label,
 p,
 textarea {
-    font-family: "Edu VIC WA NT Beginner", cursive;
+    font-family: var(--fontSansserif);
 }
 
 #bioText label {
-    font-weight: bold;
+    font-size: 1.5rem;
     text-decoration: underline;
 }
 
@@ -213,4 +222,22 @@ textarea {
     text-align: left;
     padding: 5px;
     font-size: 1em;
+}
+
+/************** FIND USERS ***************/
+
+#findUsers h3,
+li {
+    font-family: var(--fontSansserif);
+    margin: 1rem;
+}
+
+#findUsers li {
+    list-style-type: none;
+}
+
+#findUsers li img {
+    height: 7rem;
+    width: 7rem;
+    object-fit: cover;
 }

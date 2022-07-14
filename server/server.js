@@ -71,29 +71,26 @@ app.get("/user/info", (req, res) => {
         });
 });
 
+app.get("/findusers/", (req, res) => {
+    db.findNewUsers()
+        .then((result) => {
+            // console.log(result.rows);
+            res.json(result.rows);
+        })
+        .catch((err) => {
+            console.log("err in findNewUsers: ", err);
+        });
+});
+
 app.get("/findusers/:search", (req, res) => {
-    console.log("search = ", req.params.search);
-    // if no search is entered, req.params.search == "defaultProfilePic.jpg"
-    // i have absolutely no idea why this happens
-    if (req.params.search != "defaultProfilePic.jpg") {
-        db.findUsers(req.params.search)
-            .then((result) => {
-                console.log(result.rows);
-                res.json(result.rows);
-            })
-            .catch((err) => {
-                console.log("err in findUsers: ", err);
-            });
-    } else {
-        db.findNewUsers()
-            .then((result) => {
-                console.log(result.rows);
-                res.json(result.rows);
-            })
-            .catch((err) => {
-                console.log("err in findNewUsers: ", err);
-            });
-    }
+    db.findUsers(req.params.search)
+        .then((result) => {
+            // console.log(result.rows);
+            res.json(result.rows);
+        })
+        .catch((err) => {
+            console.log("err in findUsers: ", err);
+        });
 });
 
 app.get("/logout", (req, res) => {
