@@ -117,7 +117,7 @@ export default class App extends Component {
 
                             <FindUsers />
                         </Route>
-                        <Route path="/user/:userId">
+                        <Route path="/user/:otherUserId">
                             <OtherProfile />
                         </Route>
                     </Switch>

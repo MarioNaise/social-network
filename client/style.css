@@ -173,7 +173,7 @@ button:active {
 #uploader,
 #findUsers {
     width: 100vw;
-    min-height: 80vh;
+    min-height: 85vh;
     background-color: var(--backgroundColor);
     position: relative;
 }
@@ -204,7 +204,7 @@ button:active {
 }
 
 #bioText * {
-    margin: 0.5rem 0;
+    margin: 0.5rem 0.5rem;
 }
 
 #bioText label,

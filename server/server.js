@@ -71,6 +71,21 @@ app.get("/user/info", (req, res) => {
         });
 });
 
+app.get("/user/profile/:id", (req, res) => {
+    db.getUserInfo(req.params.id)
+        .then((result) => {
+            res.json({
+                profile: result.rows[0],
+            });
+        })
+        .catch((err) => {
+            console.log("err in getUserInfo: ", err);
+            res.json({
+                error: true,
+            });
+        });
+});
+
 app.get("/findusers/", (req, res) => {
     db.findNewUsers()
         .then((result) => {
