@@ -13,7 +13,7 @@ export default class App extends Component {
         this.state = {
             first: "",
             last: "",
-            imageUrl: "defaultProfilePic.jpg",
+            imageUrl: "",
             bio: "",
             uploaderIsVisible: false,
             profileIsVisible: true,
@@ -40,6 +40,13 @@ export default class App extends Component {
             .catch((err) => {
                 console.log("err in fetch user/info: ", err);
             });
+    }
+
+    closeModal() {
+        this.setState({
+            uploaderIsVisible: false,
+            profileIsVisible: true,
+        });
     }
 
     toggleModal() {
@@ -70,7 +77,11 @@ export default class App extends Component {
                 <BrowserRouter>
                     <header>
                         <Link to="/">
-                            <Logo />
+                            <Logo
+                                closeModal={() => {
+                                    this.closeModal();
+                                }}
+                            />
                         </Link>
                         <h1>Hello {this.state.first}!</h1>
                         <ProfilePicture
@@ -80,10 +91,9 @@ export default class App extends Component {
                             toggleModal={() => this.toggleModal()}
                         />
                     </header>
-
                     <Switch>
                         <Route exact path="/">
-                            <nav className="flexStart">
+                            <nav>
                                 <Link className="link pointer" to="/users/find">
                                     Find Users
                                 </Link>
@@ -109,7 +119,7 @@ export default class App extends Component {
                             )}
                         </Route>
                         <Route path="/users/find">
-                            <nav className="flexStart">
+                            <nav>
                                 <Link className="link pointer" to="/">
                                     Profile
                                 </Link>
@@ -118,6 +128,14 @@ export default class App extends Component {
                             <FindUsers />
                         </Route>
                         <Route path="/user/:otherUserId">
+                            <nav>
+                                <Link className="link pointer" to="/">
+                                    Profile
+                                </Link>
+                                <Link className="link pointer" to="/users/find">
+                                    Find Users
+                                </Link>
+                            </nav>
                             <OtherProfile />
                         </Route>
                     </Switch>

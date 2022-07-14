@@ -1,16 +1,17 @@
 :root {
     --backgroundDefault: ghostwhite;
-    --backgroundNav: #ffeec8;
     --backgroundHeader: #94c4f7;
+    --backgroundNav: #ffeec8;
     --backgroundColor: #c4def9;
-    --borderColor: black;
+    --borderColor: rgb(17, 18, 21);
+    --textColor: var(--borderColor);
     --fontDefault: "Dancing Script", cursive;
     --fontSansserif: "Raleway", sans-serif;
 }
 
 * {
     font-family: var(--fontDefault);
-    color: rgb(36, 34, 34);
+    color: var(--textColor);
     text-align: center;
     margin: 0;
     padding: 0;
@@ -106,10 +107,10 @@ button:active {
 #welcome .container {
     width: 30vw;
     min-width: 400px;
-    padding: 2em;
-    margin: 2em;
+    padding: 2rem;
+    margin: 2rem;
     background-color: var(--backgroundColor);
-    border-radius: 1em;
+    border-radius: 1rem;
 }
 
 #welcome .link {
@@ -160,8 +161,11 @@ button:active {
     width: 100vw;
     background-color: var(--backgroundNav);
     border: 1px solid var(--borderColor);
+    display: flex;
+    justify-content: center;
 }
 #app nav * {
+    width: 100%;
     padding: 0.5rem 1rem;
     border-left: 1px solid var(--borderColor);
     border-right: 1px solid var(--borderColor);
@@ -240,4 +244,5 @@ li {
     height: 7rem;
     width: 7rem;
     object-fit: cover;
+    border-radius: 1rem;
 }

@@ -44,7 +44,12 @@ export default function FindUsers() {
                     return (
                         <li key={i}>
                             <Link to={`/user/${user.id}`}>
-                                <img src={user.profile_picture}></img>
+                                <img
+                                    src={
+                                        user.profile_picture ||
+                                        "/defaultProfilePic.jpg"
+                                    }
+                                ></img>
                                 <p>{`${user.first} ${user.last}`}</p>
                             </Link>
                         </li>

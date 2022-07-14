@@ -72,11 +72,22 @@ app.get("/user/info", (req, res) => {
 });
 
 app.get("/user/profile/:id", (req, res) => {
+    if (req.params.id == req.session.userId) {
+        return res.json({
+            ownProfile: true,
+            ownId: req.session.userId,
+        });
+    }
     db.getUserInfo(req.params.id)
         .then((result) => {
-            res.json({
-                profile: result.rows[0],
-            });
+            if (result.rows[0]) {
+                res.json({
+                    profile: result.rows[0],
+                });
+            } else {
+                console.log("no user found");
+                res.json({ noUser: true });
+            }
         })
         .catch((err) => {
             console.log("err in getUserInfo: ", err);

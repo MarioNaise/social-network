@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router";
+import { useParams, useHistory } from "react-router";
 
 export default function OtherProfile() {
     const { otherUserId } = useParams();
     const [user, setUser] = useState([]);
+    const history = useHistory();
 
     // 1st figure out what userId we want to fetch information for
     // console.log("otherUserId:", otherUserId);
@@ -18,7 +19,10 @@ export default function OtherProfile() {
                     );
                     const data = await respBody.json();
                     // console.log("data: ", data);
-                    if (!abort) {
+                    if (data.ownProfile) {
+                        // console.log("own profile");
+                        history.push("/");
+                    } else if (!abort) {
                         setUser(data.profile);
                     } else {
                         // console.log("ignore don't run a state update");
@@ -28,12 +32,10 @@ export default function OtherProfile() {
                 }
             })();
             // HARD CODED ASSUMPTION TO NOT USE CODE BELOW AS ACTUAL PROPER FUNCITONING LOGIC
-            if (otherUserId == 1) {
-                console.log(
-                    "need to change UI trying to access our own profile"
-                );
-                history.pushState({}, "", "/");
-            }
+            // if (ownProfile) {
+            //     console.log("own profile");
+            //     history.pushState({}, "", "/");
+            // }
         }
         return () => {
             abort = true;
@@ -42,24 +44,33 @@ export default function OtherProfile() {
 
     return (
         <div id="profile" className="flexStart">
-            <h1>
-                {user.first} {user.last}
-            </h1>
+            {(user && (
+                <h1>
+                    {user.first} {user.last}
+                </h1>
+            )) || <h1>User not found!</h1>}
 
-            <img
-                src={user.profile_picture || "defaultProfilePic.jpg"}
-                alt={`${user.first + user.last}`}
-            />
-            {(user.bio && (
-                <div id="bioText" className="flexStart">
-                    <label>Bio:</label>
-                    <p>{user.bio}</p>
-                </div>
-            )) || (
-                <div id="bioText" className="flexStart">
-                    <p>No bio yet</p>
-                </div>
+            {user && (
+                <img
+                    src={user.profile_picture || "/defaultProfilePic.jpg"}
+                    alt={`${user.first + user.last}`}
+                />
             )}
+            {(user && user.bio && (
+                <div id="bioText">
+                    <div className="flexStart">
+                        <label>Bio:</label>
+                        <p>{user.bio}</p>
+                    </div>
+                </div>
+            )) ||
+                (user && (
+                    <div id="bioText">
+                        <div className="flexStart">
+                            <p>No bio yet</p>
+                        </div>
+                    </div>
+                ))}
         </div>
     );
 }

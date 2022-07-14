@@ -49,9 +49,9 @@ export default class BioEditor extends Component {
     }
     render() {
         return (
-            <div>
+            <div id="bioText">
                 {(this.state.editorIsVisible && (
-                    <div id="bioText" className="flexStart">
+                    <div className="flexStart">
                         <label>Bio:</label>
                         <textarea
                             id="bioTextarea"
@@ -64,7 +64,7 @@ export default class BioEditor extends Component {
                     </div>
                 )) ||
                     (this.props.bio && (
-                        <div id="bioText" className="flexStart">
+                        <div className="flexStart">
                             <label>Bio:</label>
                             <p>{this.props.bio}</p>
                             <button
@@ -77,7 +77,7 @@ export default class BioEditor extends Component {
                             </button>
                         </div>
                     )) || (
-                        <div id="bioText" className="flexStart">
+                        <div className="flexStart">
                             <button onClick={() => this.toggleBioEditor()}>
                                 Add Bio
                             </button>
