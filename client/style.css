@@ -1,10 +1,12 @@
 :root {
-    --backgroundDefault: ghostwhite;
-    --backgroundHeader: #94c4f7;
-    --backgroundNav: #ffeec8;
-    --backgroundColor: #c4def9;
-    --borderColor: rgb(17, 18, 21);
-    --textColor: var(--borderColor);
+    --textColor: black;
+    --backgroundDefault: #edf2fb;
+    --backgroundHeader: #abc4ff;
+    --backgroundNav: #c1d3fe;
+    --backgroundColor: #d7e3fc;
+    --backgroundFooter: var(--backgroundHeader);
+    --borderColor: var(--textColor);
+    --boxShadow: rgba(0, 0, 0, 0.4);
     --fontDefault: "Dancing Script", cursive;
     --fontSansserif: "Raleway", sans-serif;
 }
@@ -21,6 +23,7 @@
 
 body {
     background-color: var(--backgroundDefault);
+    min-height: 100vh;
 }
 
 button,
@@ -29,13 +32,13 @@ input {
 }
 
 main {
-    min-height: 100vh;
-    width: 100vw;
     background-color: var(--backgroundDefault);
+    width: 100vw;
+    min-height: 100vh;
 }
 
-.pointer {
-    cursor: pointer;
+.logo {
+    height: 5em;
 }
 
 input,
@@ -63,19 +66,27 @@ button {
     font-size: 1rem;
     margin: 0.5em 0;
     font-family: var(--fontSansserif);
+    transition-property: all;
+    transition-duration: 0.3s;
 }
-button:active {
-    background-color: lightgrey;
-}
-
-.logo {
-    height: 5em;
+button:hover {
+    background-color: var(--backgroundHeader);
+    color: var(--backgroundDefault);
 }
 
 .link {
     font-size: 1rem;
     font-family: var(--fontSansserif);
+    transition-property: all;
+    transition-duration: 0.3s;
+}
+
+.link:hover {
     text-decoration: underline;
+}
+
+.pointer {
+    cursor: pointer;
 }
 
 .chooseFile {
@@ -94,6 +105,7 @@ button:active {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    justify-content: center;
 }
 
 /**************************************/
@@ -101,7 +113,7 @@ button:active {
 /**************************************/
 
 #welcomeHeadline {
-    font-size: 3em;
+    font-size: 4em;
 }
 
 #welcome .container {
@@ -109,7 +121,8 @@ button:active {
     min-width: 400px;
     padding: 2rem;
     margin: 2rem;
-    background-color: var(--backgroundColor);
+    background-color: var(--backgroundNav);
+    box-shadow: 3px 3px 15px 2px var(--boxShadow);
     border-radius: 1rem;
 }
 
@@ -122,7 +135,6 @@ button:active {
 /**********************************/
 
 #app {
-    min-width: 400px;
     padding: 0;
     margin: 0;
     background-color: var(--backgroundDefault);
@@ -134,7 +146,7 @@ button:active {
     width: 100vw;
     display: flex;
     justify-content: space-between;
-    font-size: 1rem;
+    font-size: 2rem;
     background-color: var(--backgroundHeader);
 }
 
@@ -155,40 +167,48 @@ button:active {
     margin: 1rem;
 }
 
+#time {
+    font-size: 1rem;
+    width: 5rem;
+}
+
 /************** NAV ***************/
 
 #app nav {
     width: 100vw;
     background-color: var(--backgroundNav);
-    border: 1px solid var(--borderColor);
     display: flex;
     justify-content: center;
 }
 #app nav * {
     width: 100%;
     padding: 0.5rem 1rem;
-    border-left: 1px solid var(--borderColor);
-    border-right: 1px solid var(--borderColor);
 }
 
-/************** PROFILE ***************/
+/************** PROFILE & FIND USERS ***************/
 
 #profile,
-#uploader,
 #findUsers {
-    width: 100vw;
-    min-height: 85vh;
+    width: 80vw;
+    min-height: 40vh;
+    border-radius: 1rem;
     background-color: var(--backgroundColor);
+    box-shadow: 3px 3px 15px 2px var(--boxShadow);
+    margin: 1rem;
     position: relative;
 }
 
-#profile *,
-#uploader * {
-    margin: 1rem;
+#findUsers li p {
     font-family: var(--fontSansserif);
 }
 
+#profile *,
+#uploadImage * {
+    margin: 1rem;
+}
+
 #profile img {
+    margin-top: 0;
     height: 20rem;
     border-radius: 1rem;
 }
@@ -197,6 +217,29 @@ button:active {
     position: absolute;
     top: 0;
     right: 0;
+}
+
+/************** UPLAODER ***************/
+
+#app .container {
+    width: 100vw;
+    height: auto;
+    min-height: 68vh;
+    margin: 1rem 0;
+    position: relative;
+}
+#uploader * {
+    margin: 1rem;
+    font-family: var(--fontSansserif);
+}
+
+#uploader {
+    width: auto;
+    height: auto;
+    font-family: var(--fontSansserif);
+    border-radius: 1rem;
+    background-color: var(--backgroundColor);
+    box-shadow: 3px 3px 15px 2px var(--boxShadow);
 }
 
 /************** BIO ***************/
@@ -211,13 +254,14 @@ button:active {
     margin: 0.5rem 0.5rem;
 }
 
-#bioText label,
-p,
-textarea {
+#bioText,
+#bioText p,
+#bioText textarea {
     font-family: var(--fontSansserif);
 }
 
 #bioText label {
+    font-family: var(--fontDefault);
     font-size: 1.5rem;
     text-decoration: underline;
 }
@@ -231,8 +275,9 @@ textarea {
 /************** FIND USERS ***************/
 
 #findUsers h3,
-li {
+#findUsers li {
     font-family: var(--fontSansserif);
+    font-size: large;
     margin: 1rem;
 }
 
@@ -245,4 +290,16 @@ li {
     width: 7rem;
     object-fit: cover;
     border-radius: 1rem;
+}
+
+/************** FOOTER ***************/
+
+#app footer {
+    width: 100vw;
+    height: 2rem;
+    background-color: var(--backgroundFooter);
+}
+
+#app footer * {
+    padding-left: 1rem;
 }

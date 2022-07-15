@@ -88,7 +88,7 @@ module.exports.updateBio = (userId, bio) => {
 
 module.exports.findUsers = (val) => {
     return db.query(
-        `SELECT first, last, profile_picture, bio, email, id
+        `SELECT *
         FROM users
         WHERE first ILIKE $1
         OR last ILIKE $1
@@ -99,9 +99,44 @@ module.exports.findUsers = (val) => {
 
 module.exports.findNewUsers = () => {
     return db.query(
-        `SELECT first, last, profile_picture, bio, email, id
+        `SELECT *
         FROM users
         ORDER BY id DESC
         LIMIT 4;`
+    );
+};
+
+module.exports.friendshipStatus = (userId, viewedUserId) => {
+    return db.query(
+        `SELECT * FROM friendships 
+        WHERE (recipient_id = $1 AND sender_id = $2) 
+        OR (recipient_id = $2 AND sender_id = $1);`,
+        [userId, viewedUserId]
+    );
+};
+
+module.exports.sendFriendRequest = (userId, viewedUserId) => {
+    return db.query(
+        `INSERT INTO friendships (sender_id, recipient_id)
+        VALUES ($1, $2);`,
+        [userId, viewedUserId]
+    );
+};
+
+module.exports.acceptFriendRequest = (userId, viewedUserId) => {
+    return db.query(
+        `UPDATE friendships
+        SET accepted = true
+        WHERE (recipient_id = $1 AND sender_id = $2);`,
+        [userId, viewedUserId]
+    );
+};
+
+module.exports.deleteRelation = (userId, viewedUserId) => {
+    return db.query(
+        `DELETE FROM friendships
+        WHERE (recipient_id = $1 AND sender_id = $2) 
+        OR (recipient_id = $2 AND sender_id = $1);`,
+        [userId, viewedUserId]
     );
 };

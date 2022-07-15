@@ -31,31 +31,33 @@ export default function FindUsers() {
     }, [searchInput]);
 
     return (
-        <div id="findUsers" className="flex">
-            <h3> Find other people:</h3>
-            <input
-                placeholder="Enter Name"
-                onChange={(e) => {
-                    setSearchInput(e.target.value);
-                }}
-            ></input>
-            <ul>
-                {users?.map((user, i) => {
-                    return (
-                        <li key={i}>
-                            <Link to={`/user/${user.id}`}>
-                                <img
-                                    src={
-                                        user.profile_picture ||
-                                        "/defaultProfilePic.jpg"
-                                    }
-                                ></img>
-                                <p>{`${user.first} ${user.last}`}</p>
-                            </Link>
-                        </li>
-                    );
-                })}
-            </ul>
+        <div className="container flex">
+            <div id="findUsers" className="flex">
+                <h3> Find other people:</h3>
+                <input
+                    placeholder="Enter Name"
+                    onChange={(e) => {
+                        setSearchInput(e.target.value);
+                    }}
+                ></input>
+                <ul>
+                    {users?.map((user, i) => {
+                        return (
+                            <li key={i}>
+                                <Link to={`/user/${user.id}`}>
+                                    <img
+                                        src={
+                                            user.profile_picture ||
+                                            "/defaultProfilePic.jpg"
+                                        }
+                                    ></img>
+                                    <p>{`${user.first} ${user.last}`}</p>
+                                </Link>
+                            </li>
+                        );
+                    })}
+                </ul>
+            </div>
         </div>
     );
 }

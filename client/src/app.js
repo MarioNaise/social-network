@@ -6,6 +6,7 @@ import Logo from "./logo";
 import Profile from "./profile";
 import OtherProfile from "./otherProfile";
 import FindUsers from "./findUsers";
+import Time from "./time";
 
 export default class App extends Component {
     constructor() {
@@ -17,15 +18,25 @@ export default class App extends Component {
             bio: "",
             uploaderIsVisible: false,
             profileIsVisible: true,
+            greetee: "",
         };
     }
 
     componentDidMount() {
-        // HERE is where we want to make a fetch request to "GET" info
-        // about logged in or newly registered user
-        // first name, last name, profile picture url (we dont have yet)
-        // when we have the info from the server, add it to the state of this
-        // component with this.setState
+        //////// GREETEE ////////
+        const date = new Date();
+        const hour = date.getHours();
+        const greetee =
+            (hour < 12 && "Good Morning,") ||
+            (hour < 18 && "Good Afternoon,") ||
+            (hour < 24 && "Good Evening, ") ||
+            "Hello";
+        this.setState({
+            greetee,
+        });
+
+        //////// OWN USER INFO ////////
+
         fetch("/user/info")
             .then((resp) => resp.json())
             .then((data) => {
@@ -83,7 +94,12 @@ export default class App extends Component {
                                 }}
                             />
                         </Link>
-                        <h1>Hello {this.state.first}!</h1>
+                        <div className="flex">
+                            <h1>
+                                {this.state.greetee} {this.state.first}!
+                            </h1>
+                            <Time />
+                        </div>
                         <ProfilePicture
                             first={this.state.first}
                             last={this.state.last}
@@ -94,9 +110,14 @@ export default class App extends Component {
                     <Switch>
                         <Route exact path="/">
                             <nav>
-                                <Link className="link pointer" to="/users/find">
-                                    Find Users
-                                </Link>
+                                <div>
+                                    <Link
+                                        className="link pointer"
+                                        to="/users/find"
+                                    >
+                                        Find Users
+                                    </Link>
+                                </div>
                             </nav>
 
                             {this.state.uploaderIsVisible && (
@@ -120,26 +141,38 @@ export default class App extends Component {
                         </Route>
                         <Route path="/users/find">
                             <nav>
-                                <Link className="link pointer" to="/">
-                                    Profile
-                                </Link>
+                                <div>
+                                    <Link className="link pointer" to="/">
+                                        Profile
+                                    </Link>
+                                </div>
                             </nav>
 
                             <FindUsers />
                         </Route>
-                        <Route path="/user/:otherUserId">
+                        <Route path="/user/:viewedUserId">
                             <nav>
-                                <Link className="link pointer" to="/">
-                                    Profile
-                                </Link>
-                                <Link className="link pointer" to="/users/find">
-                                    Find Users
-                                </Link>
+                                <div>
+                                    <Link className="link pointer" to="/">
+                                        Profile
+                                    </Link>
+                                </div>
+                                <div>
+                                    <Link
+                                        className="link pointer"
+                                        to="/users/find"
+                                    >
+                                        Find Users
+                                    </Link>
+                                </div>
                             </nav>
                             <OtherProfile />
                         </Route>
                     </Switch>
                 </BrowserRouter>
+                <footer className="flexStart">
+                    <p>© Edwin Harmuth</p>
+                </footer>
             </div>
         );
     }

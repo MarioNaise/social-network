@@ -119,6 +119,65 @@ app.get("/findusers/:search", (req, res) => {
         });
 });
 
+app.get("/relation/:viewedId", (req, res) => {
+    db.friendshipStatus(req.session.userId, parseInt(req.params.viewedId))
+        .then((result) => {
+            // console.log("relation: ", result.rows[0]);
+            if (
+                result.rows[0] &&
+                result.rows[0].sender_id === req.session.userId
+            ) {
+                res.json({ status: result.rows[0], sender: true });
+            } else if (
+                result.rows[0] &&
+                result.rows[0].sender_id !== req.session.userId
+            ) {
+                res.json({ status: result.rows[0], sender: false });
+            } else {
+                res.json({ noRelation: true });
+            }
+        })
+        .catch((err) => {
+            console.log("err in friendshipStatus: ", err);
+        });
+});
+
+app.get("/friendship/:action/:viewedId", (req, res) => {
+    const action = req.params.action;
+    const viewedId = req.params.viewedId;
+    if (action === "add") {
+        // add friend
+        // console.log("run sendFriendRequest");
+        db.sendFriendRequest(req.session.userId, viewedId)
+            .then(() => {
+                res.json({ success: true });
+            })
+            .catch((err) => {
+                console.log("err in sendFriendRequest: ", err);
+            });
+    } else if (action === "remove" || action === "cancel") {
+        // remove friend or cancel request
+        // console.log("run deleteRelation");
+        db.deleteRelation(req.session.userId, viewedId)
+            .then(() => {
+                res.json({ success: true });
+            })
+            .catch((err) => {
+                console.log("err in deleteRelation: ", err);
+            });
+    } else {
+        // accept friend
+        // console.log("run acceptFriendRequest");
+        db.acceptFriendRequest(req.session.userId, viewedId)
+            .then(() => {
+                res.json({ success: true });
+            })
+            .catch((err) => {
+                console.log("err in acceptFriendRequest: ", err);
+            });
+    }
+});
+
 app.get("/logout", (req, res) => {
     req.session = null;
     res.redirect("/");
@@ -142,7 +201,7 @@ app.post("/register", (req, res) => {
                     res.json({ success: true });
                 })
                 .catch((err) => {
-                    // console.log("err in registerUser: ", err);
+                    console.log("err in registerUser: ", err);
                     res.json({ error: true });
                 });
         })
@@ -190,22 +249,22 @@ app.post("/password/reset/code", (req, res) => {
             // console.log(result.rows[0]);
             if (result.rows[0].email) {
                 db.insertResetCode(result.rows[0].email, secretCode)
-                    .then((results) => {
+                    .then(() => {
                         ses.sendEmail(
                             result.rows[0].email,
                             `Hello. Your personal code for resetting your password is: ${secretCode}. For security reasons, you should never share this code with anyone.`,
                             "Your personal verification code."
                         )
-                            .then((result) => {
+                            .then(() => {
                                 res.json({ success: true });
                             })
                             .catch((err) => {
-                                // console.log("err in sendEmail: ", err);
+                                console.log("err in sendEmail: ", err);
                                 res.json({ error: true });
                             });
                     })
                     .catch((err) => {
-                        // console.log("err in insertResetCode: ", err);
+                        console.log("err in insertResetCode: ", err);
                         res.json({ error: true });
                     });
             } else {
@@ -213,7 +272,7 @@ app.post("/password/reset/code", (req, res) => {
             }
         })
         .catch((err) => {
-            // console.log("err in searchUser: ", err);
+            console.log("err in searchUser: ", err);
             res.json({ error: true });
         });
 });
@@ -230,11 +289,11 @@ app.post("/password/reset", (req, res) => {
                     .hash(req.body.password)
                     .then((hash) => {
                         db.updatePassword(req.body.email, hash)
-                            .then((result) => {
+                            .then(() => {
                                 res.json({ success: true });
                             })
                             .catch((err) => {
-                                // console.log("err in changePassword: ", err);
+                                console.log("err in changePassword: ", err);
                                 res.json({ error: true });
                             });
                     })
@@ -261,7 +320,7 @@ const storage = multer.diskStorage({
         callback(null, path.join(__dirname, "uploads"));
     },
     filename(req, file, callback) {
-        const randomFileName = uidSafe(24).then((randomString) => {
+        uidSafe(24).then((randomString) => {
             callback(null, randomString + path.extname(file.originalname));
         });
     },
@@ -285,7 +344,7 @@ app.post(
             req.session.userId
         )
             .then((result) => {
-                newImage = result.rows[0];
+                const newImage = result.rows[0];
                 res.json({
                     newImage,
                 });

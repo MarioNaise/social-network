@@ -9,24 +9,26 @@ export default class Profile extends Component {
 
     render() {
         return (
-            <div id="profile" className="flexStart">
-                <h1>
-                    {this.props.first} {this.props.last}
-                </h1>
+            <div className="container flex">
+                <div id="profile" className="flexStart">
+                    <h1>
+                        {this.props.first} {this.props.last}
+                    </h1>
 
-                <img
-                    src={this.props.imageUrl || "defaultProfilePic.jpg"}
-                    alt={this.props.first + this.props.last}
-                />
-                <BioEditor
-                    bio={this.props.bio}
-                    submitBioInApp={(bio) => {
-                        this.props.submitBioInApp(bio);
-                    }}
-                />
-                <a className="link logout pointer" href="/logout">
-                    Logout
-                </a>
+                    <img
+                        src={this.props.imageUrl || "defaultProfilePic.jpg"}
+                        alt={this.props.first + this.props.last}
+                    />
+                    <BioEditor
+                        bio={this.props.bio}
+                        submitBioInApp={(bio) => {
+                            this.props.submitBioInApp(bio);
+                        }}
+                    />
+                    <a className="link logout pointer" href="/logout">
+                        Logout
+                    </a>
+                </div>
             </div>
         );
     }

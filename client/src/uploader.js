@@ -24,20 +24,22 @@ export default class Uploader extends Component {
 
     render() {
         return (
-            <div id="uploader" className="flex">
-                <h3>Change your profile picture:</h3>
-                <form
-                    onSubmit={(e) => this.submitInUploader(e)}
-                    className="flex"
-                >
-                    <input
-                        className="chooseFile"
-                        name="image"
-                        type="file"
-                        accept="image/*"
-                    ></input>
-                    <button type="submit">Submit</button>
-                </form>
+            <div className="container flex">
+                <div id="uploader" className="flex">
+                    <h3>Change your profile picture:</h3>
+                    <form
+                        onSubmit={(e) => this.submitInUploader(e)}
+                        className="flex"
+                    >
+                        <input
+                            className="chooseFile"
+                            name="image"
+                            type="file"
+                            accept="image/*"
+                        ></input>
+                        <button type="submit">Upload</button>
+                    </form>
+                </div>
             </div>
         );
     }
