@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 
 export default function FriendButton(props) {
     const [buttonText, setButtonText] = useState("");
+    const [action, setAction] = useState("");
 
     // check friendship status between users
     useEffect(() => {
@@ -13,21 +14,25 @@ export default function FriendButton(props) {
                 if (data.noRelation === true) {
                     // console.log("case 1");
                     setButtonText("Add Friend");
-                } else if (data.status.accepted == true) {
+                    setAction("add");
+                } else if (data.accepted == true) {
                     // console.log("case 2");
                     setButtonText("Remove Friend");
+                    setAction("remove");
                 } else if (
-                    data.status.accepted === false &&
-                    data.sender === true
+                    data.accepted === false &&
+                    data.sender_id != props.viewedUserId
                 ) {
                     // console.log("case 3");
                     setButtonText("Cancel Friendrequest");
+                    setAction("cancel");
                 } else if (
-                    data.status.accepted === false &&
-                    data.sender === false
+                    data.accepted === false &&
+                    data.sender_id == props.viewedUserId
                 ) {
                     // console.log("case 4");
                     setButtonText("Accept Friendrequest");
+                    setAction("accept");
                 }
             } catch (err) {
                 console.log("err on fetch relation: ", err);
@@ -35,21 +40,19 @@ export default function FriendButton(props) {
         })();
     }, []);
 
-    const submitFriendRequest = (text) => {
-        const action =
-            (text === "Add Friend" && "add") ||
-            (text === "Remove Friend" && "remove") ||
-            (text === "Cancel Friendrequest" && "cancel") ||
-            (text === "Accept Friendrequest" && "accept");
+    const submitFriendRequest = (oldButtonText) => {
         const newButtonText =
-            (text === "Add Friend" && "Cancel Friendrequest") ||
-            (text === "Remove Friend" && "Add Friend") ||
-            (text === "Cancel Friendrequest" && "Add Friend") ||
-            (text === "Accept Friendrequest" && "Remove Friend");
+            (oldButtonText === "Add Friend" && "Cancel Friendrequest") ||
+            (oldButtonText === "Remove Friend" && "Add Friend") ||
+            (oldButtonText === "Cancel Friendrequest" && "Add Friend") ||
+            (oldButtonText === "Accept Friendrequest" && "Remove Friend");
         (async () => {
             try {
                 const respBody = await fetch(
-                    `/friendship/${action}/${props.viewedUserId}`
+                    `/friendship/${action}/${props.viewedUserId}`,
+                    {
+                        method: "POST",
+                    }
                 );
                 const data = await respBody.json();
                 // console.log("data in fetch friendship: ", data);

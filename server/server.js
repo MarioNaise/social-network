@@ -123,16 +123,8 @@ app.get("/relation/:viewedId", (req, res) => {
     db.friendshipStatus(req.session.userId, parseInt(req.params.viewedId))
         .then((result) => {
             // console.log("relation: ", result.rows[0]);
-            if (
-                result.rows[0] &&
-                result.rows[0].sender_id === req.session.userId
-            ) {
-                res.json({ status: result.rows[0], sender: true });
-            } else if (
-                result.rows[0] &&
-                result.rows[0].sender_id !== req.session.userId
-            ) {
-                res.json({ status: result.rows[0], sender: false });
+            if (result.rows[0]) {
+                res.json(result.rows[0]);
             } else {
                 res.json({ noRelation: true });
             }
@@ -140,42 +132,6 @@ app.get("/relation/:viewedId", (req, res) => {
         .catch((err) => {
             console.log("err in friendshipStatus: ", err);
         });
-});
-
-app.get("/friendship/:action/:viewedId", (req, res) => {
-    const action = req.params.action;
-    const viewedId = req.params.viewedId;
-    if (action === "add") {
-        // add friend
-        // console.log("run sendFriendRequest");
-        db.sendFriendRequest(req.session.userId, viewedId)
-            .then(() => {
-                res.json({ success: true });
-            })
-            .catch((err) => {
-                console.log("err in sendFriendRequest: ", err);
-            });
-    } else if (action === "remove" || action === "cancel") {
-        // remove friend or cancel request
-        // console.log("run deleteRelation");
-        db.deleteRelation(req.session.userId, viewedId)
-            .then(() => {
-                res.json({ success: true });
-            })
-            .catch((err) => {
-                console.log("err in deleteRelation: ", err);
-            });
-    } else {
-        // accept friend
-        // console.log("run acceptFriendRequest");
-        db.acceptFriendRequest(req.session.userId, viewedId)
-            .then(() => {
-                res.json({ success: true });
-            })
-            .catch((err) => {
-                console.log("err in acceptFriendRequest: ", err);
-            });
-    }
 });
 
 app.get("/logout", (req, res) => {
@@ -209,6 +165,42 @@ app.post("/register", (req, res) => {
             console.log("err in bcrypt register: ", err);
             res.json({ error: true });
         });
+});
+
+app.post("/friendship/:action/:viewedId", (req, res) => {
+    const action = req.params.action;
+    const viewedId = req.params.viewedId;
+    if (action === "add") {
+        // add friend
+        // console.log("run sendFriendRequest");
+        db.sendFriendRequest(req.session.userId, viewedId)
+            .then(() => {
+                res.json({ success: true });
+            })
+            .catch((err) => {
+                console.log("err in sendFriendRequest: ", err);
+            });
+    } else if (action === "remove" || action === "cancel") {
+        // remove friend or cancel request
+        // console.log("run deleteRelation");
+        db.deleteRelation(req.session.userId, viewedId)
+            .then(() => {
+                res.json({ success: true });
+            })
+            .catch((err) => {
+                console.log("err in deleteRelation: ", err);
+            });
+    } else {
+        // accept friend
+        // console.log("run acceptFriendRequest");
+        db.acceptFriendRequest(req.session.userId, viewedId)
+            .then(() => {
+                res.json({ success: true });
+            })
+            .catch((err) => {
+                console.log("err in acceptFriendRequest: ", err);
+            });
+    }
 });
 
 app.post("/login", (req, res) => {
