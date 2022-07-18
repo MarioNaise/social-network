@@ -107,19 +107,24 @@ export default class App extends Component {
                             toggleModal={() => this.toggleModal()}
                         />
                     </header>
+                    <nav>
+                        <div>
+                            <Link
+                                onClick={() => this.closeModal()}
+                                className="link pointer"
+                                to="/"
+                            >
+                                Profile
+                            </Link>
+                        </div>
+                        <div>
+                            <Link className="link pointer" to="/users/find">
+                                Find Users
+                            </Link>
+                        </div>
+                    </nav>
                     <Switch>
                         <Route exact path="/">
-                            <nav>
-                                <div>
-                                    <Link
-                                        className="link pointer"
-                                        to="/users/find"
-                                    >
-                                        Find Users
-                                    </Link>
-                                </div>
-                            </nav>
-
                             {this.state.uploaderIsVisible && (
                                 <Uploader
                                     submitInApp={(url) => {
@@ -140,32 +145,9 @@ export default class App extends Component {
                             )}
                         </Route>
                         <Route path="/users/find">
-                            <nav>
-                                <div>
-                                    <Link className="link pointer" to="/">
-                                        Profile
-                                    </Link>
-                                </div>
-                            </nav>
-
                             <FindUsers />
                         </Route>
                         <Route path="/user/:viewedUserId">
-                            <nav>
-                                <div>
-                                    <Link className="link pointer" to="/">
-                                        Profile
-                                    </Link>
-                                </div>
-                                <div>
-                                    <Link
-                                        className="link pointer"
-                                        to="/users/find"
-                                    >
-                                        Find Users
-                                    </Link>
-                                </div>
-                            </nav>
                             <OtherProfile />
                         </Route>
                     </Switch>

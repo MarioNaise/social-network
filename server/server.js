@@ -167,41 +167,7 @@ app.post("/register", (req, res) => {
         });
 });
 
-app.post("/friendship/:action/:viewedId", (req, res) => {
-    const action = req.params.action;
-    const viewedId = req.params.viewedId;
-    if (action === "add") {
-        // add friend
-        // console.log("run sendFriendRequest");
-        db.sendFriendRequest(req.session.userId, viewedId)
-            .then(() => {
-                res.json({ success: true });
-            })
-            .catch((err) => {
-                console.log("err in sendFriendRequest: ", err);
-            });
-    } else if (action === "remove" || action === "cancel") {
-        // remove friend or cancel request
-        // console.log("run deleteRelation");
-        db.deleteRelation(req.session.userId, viewedId)
-            .then(() => {
-                res.json({ success: true });
-            })
-            .catch((err) => {
-                console.log("err in deleteRelation: ", err);
-            });
-    } else {
-        // accept friend
-        // console.log("run acceptFriendRequest");
-        db.acceptFriendRequest(req.session.userId, viewedId)
-            .then(() => {
-                res.json({ success: true });
-            })
-            .catch((err) => {
-                console.log("err in acceptFriendRequest: ", err);
-            });
-    }
-});
+
 
 app.post("/login", (req, res) => {
     db.loginUser(req.body.email)
@@ -304,8 +270,41 @@ app.post("/password/reset", (req, res) => {
         });
 });
 
+app.post("/friendship/:action/:viewedId", (req, res) => {
+    const action = req.params.action;
+    const viewedId = req.params.viewedId;
+    if (action === "add") {
+        // console.log("run sendFriendRequest");
+        db.sendFriendRequest(req.session.userId, viewedId)
+            .then(() => {
+                res.json({ success: true });
+            })
+            .catch((err) => {
+                console.log("err in sendFriendRequest: ", err);
+            });
+    } else if (action === "remove" || action === "cancel") {
+        // console.log("run deleteRelation");
+        db.deleteRelation(req.session.userId, viewedId)
+            .then(() => {
+                res.json({ success: true });
+            })
+            .catch((err) => {
+                console.log("err in deleteRelation: ", err);
+            });
+    } else {
+        // console.log("run acceptFriendRequest");
+        db.acceptFriendRequest(req.session.userId, viewedId)
+            .then(() => {
+                res.json({ success: true });
+            })
+            .catch((err) => {
+                console.log("err in acceptFriendRequest: ", err);
+            });
+    }
+});
+
 /////////////////////////////////////////////////////////////////
-//////////////////////   UPLOAD    //////////////////////////////
+//////////////////////   PROFILE    /////////////////////////////
 /////////////////////////////////////////////////////////////////
 const storage = multer.diskStorage({
     destination(req, file, callback) {

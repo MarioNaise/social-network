@@ -1,9 +1,9 @@
 import { useState } from "react";
 
 export default function Time() {
-    const [time, setTime] = useState([]);
+    const [time, setTime] = useState("");
 
-    setInterval(() => {
+    setTimeout(() => {
         const dateTime = new Date();
         setTime(dateTime.toLocaleTimeString().slice(0, 8));
     }, 1000);

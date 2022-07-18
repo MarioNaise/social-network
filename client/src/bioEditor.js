@@ -22,7 +22,9 @@ export default class BioEditor extends Component {
     }
 
     handleChange(e) {
-        this.setState({ draftBio: e.target.value });
+        this.setState({
+            draftBio: e.target.value,
+        });
     }
 
     submitBio() {
