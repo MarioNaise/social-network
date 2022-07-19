@@ -9,8 +9,8 @@ export default class Profile extends Component {
 
     render() {
         return (
-            <div className="container flex">
-                <div id="profile" className="flexStart">
+            <section className="container flex">
+                <div id="profile" className="flexStart innerContainer">
                     <h1>
                         {this.props.first} {this.props.last}
                     </h1>
@@ -29,7 +29,7 @@ export default class Profile extends Component {
                         Logout
                     </a>
                 </div>
-            </div>
+            </section>
         );
     }
 }

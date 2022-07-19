@@ -7,6 +7,7 @@ import Profile from "./profile";
 import OtherProfile from "./otherProfile";
 import FindUsers from "./findUsers";
 import Time from "./time";
+import FriendsAndWannabes from "./friendsAndWannabees.js";
 
 export default class App extends Component {
     constructor() {
@@ -122,6 +123,11 @@ export default class App extends Component {
                                 Find Users
                             </Link>
                         </div>
+                        <div>
+                            <Link className="link pointer" to="/friends">
+                                Friends
+                            </Link>
+                        </div>
                     </nav>
                     <Switch>
                         <Route exact path="/">
@@ -149,6 +155,9 @@ export default class App extends Component {
                         </Route>
                         <Route path="/user/:viewedUserId">
                             <OtherProfile />
+                        </Route>
+                        <Route path="/friends">
+                            <FriendsAndWannabes />
                         </Route>
                     </Switch>
                 </BrowserRouter>

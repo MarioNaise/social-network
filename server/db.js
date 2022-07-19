@@ -32,7 +32,8 @@ module.exports.insertResetCode = (email, secretCode) => {
 
 module.exports.findUser = (email) => {
     return db.query(
-        `SELECT * FROM users
+        `SELECT * 
+        FROM users
         WHERE email = $1;`,
         [email]
     );
@@ -40,7 +41,8 @@ module.exports.findUser = (email) => {
 
 module.exports.findCode = (email) => {
     return db.query(
-        `SELECT * FROM reset_codes
+        `SELECT * 
+        FROM reset_codes
         WHERE CURRENT_TIMESTAMP - created_at < INTERVAL '10 minutes'
         AND email = $1
         ORDER BY id DESC
@@ -60,7 +62,8 @@ module.exports.updatePassword = (email, password) => {
 
 module.exports.getUserInfo = (userId) => {
     return db.query(
-        `SELECT * FROM users
+        `SELECT id, first, last, bio, profile_picture 
+        FROM users
         WHERE id = $1;`,
         [userId]
     );
@@ -88,7 +91,7 @@ module.exports.updateBio = (userId, bio) => {
 
 module.exports.findUsers = (val) => {
     return db.query(
-        `SELECT *
+        `SELECT id, first, last, bio, profile_picture
         FROM users
         WHERE first ILIKE $1
         OR last ILIKE $1
@@ -99,7 +102,7 @@ module.exports.findUsers = (val) => {
 
 module.exports.findNewUsers = () => {
     return db.query(
-        `SELECT *
+        `SELECT id, first, last, bio, profile_picture
         FROM users
         ORDER BY id DESC
         LIMIT 4;`
@@ -138,5 +141,17 @@ module.exports.deleteRelation = (userId, viewedUserId) => {
         WHERE (recipient_id = $1 AND sender_id = $2) 
         OR (recipient_id = $2 AND sender_id = $1);`,
         [userId, viewedUserId]
+    );
+};
+
+module.exports.findFriends = (id) => {
+    return db.query(
+        `SELECT users.id, users.first, users.last, users.profile_picture, friendships.accepted
+        FROM friendships
+        JOIN users
+        ON (accepted = false AND recipient_id = $1 AND sender_id = users.id)
+        OR (accepted = true AND recipient_id = $1 AND sender_id = users.id)
+        OR (accepted = true AND sender_id = $1 AND recipient_id = users.id);`,
+        [id]
     );
 };

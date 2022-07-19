@@ -172,6 +172,16 @@ button:hover {
     width: 5rem;
 }
 
+#app .innerContainer {
+    width: 80vw;
+    min-height: 40vh;
+    border-radius: 1rem;
+    background-color: var(--backgroundColor);
+    box-shadow: 3px 3px 15px 2px var(--boxShadow);
+    margin: 1rem;
+    position: relative;
+}
+
 /************** NAV ***************/
 
 #app nav {
@@ -185,25 +195,9 @@ button:hover {
     padding: 0.5rem 1rem;
 }
 
-/************** PROFILE & FIND USERS ***************/
+/************** PROFILE ***************/
 
-#profile,
-#findUsers {
-    width: 80vw;
-    min-height: 40vh;
-    border-radius: 1rem;
-    background-color: var(--backgroundColor);
-    box-shadow: 3px 3px 15px 2px var(--boxShadow);
-    margin: 1rem;
-    position: relative;
-}
-
-#findUsers li p {
-    font-family: var(--fontSansserif);
-}
-
-#profile *,
-#uploadImage * {
+#profile * {
     margin: 1rem;
 }
 
@@ -274,10 +268,8 @@ button:hover {
 
 /************** FIND USERS ***************/
 
-#findUsers h3,
+#findUsers h1,
 #findUsers li {
-    font-family: var(--fontSansserif);
-    font-size: large;
     margin: 1rem;
 }
 
@@ -285,9 +277,30 @@ button:hover {
     list-style-type: none;
 }
 
+#findUsers * {
+    font-family: var(--fontSansserif);
+}
+
 #findUsers li img {
     height: 7rem;
     width: 7rem;
+    object-fit: cover;
+    border-radius: 1rem;
+}
+
+/************** FRIENDS ***************/
+
+#friendsAndWannabees * {
+    font-family: var(--fontSansserif);
+}
+
+#friendsAndWannabees h1 {
+    margin: 1rem;
+}
+
+#friendsAndWannabees img {
+    width: 7rem;
+    height: 7rem;
     object-fit: cover;
     border-radius: 1rem;
 }

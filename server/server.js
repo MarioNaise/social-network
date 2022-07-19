@@ -134,6 +134,17 @@ app.get("/relation/:viewedId", (req, res) => {
         });
 });
 
+app.get("/api/friends", (req, res) => {
+    db.findFriends(req.session.userId)
+        .then((result) => {
+            res.json(result.rows);
+        })
+        .catch((err) => {
+            console.log("err in findFriends: ", err);
+            res.json({ error: true });
+        });
+});
+
 app.get("/logout", (req, res) => {
     req.session = null;
     res.redirect("/");
@@ -166,8 +177,6 @@ app.post("/register", (req, res) => {
             res.json({ error: true });
         });
 });
-
-
 
 app.post("/login", (req, res) => {
     db.loginUser(req.body.email)

@@ -31,9 +31,9 @@ export default function FindUsers() {
     }, [searchInput]);
 
     return (
-        <div className="container flex">
-            <div id="findUsers" className="flex">
-                <h3> Find other people:</h3>
+        <section className="container flex">
+            <div id="findUsers" className="flex innerContainer">
+                <h1> Find other people:</h1>
                 <input
                     placeholder="Enter Name"
                     onChange={(e) => {
@@ -58,6 +58,6 @@ export default function FindUsers() {
                     })}
                 </ul>
             </div>
-        </div>
+        </section>
     );
 }

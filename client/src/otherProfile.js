@@ -38,8 +38,8 @@ export default function OtherProfile() {
     }, []);
 
     return (
-        <div className="container flex">
-            <div id="profile" className="flexStart">
+        <section className="container flex">
+            <div id="profile" className="flexStart innerContainer">
                 {(user && (
                     <h1>
                         {user.first} {user.last}
@@ -69,6 +69,6 @@ export default function OtherProfile() {
                     ))}
                 {user && <FriendButton viewedUserId={viewedUserId} />}
             </div>
-        </div>
+        </section>
     );
 }
