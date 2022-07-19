@@ -1,8 +1,8 @@
 import { combineReducers } from "redux";
-import friendsWannabeesReducer from "./friends/slice";
+import friendsWannabesReducer from "./friends/slice";
 
 const rootReducer = combineReducers({
-    friends: friendsWannabeesReducer,
+    friends: friendsWannabesReducer,
 });
 
 export default rootReducer;

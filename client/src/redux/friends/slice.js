@@ -5,40 +5,52 @@
 
 // friends=[] : is a property inside global state
 // we're using default parameter here
-export default function friendsWannabeesReducer(friends = [], action) {
-    if (action.type === "friends-wannabees/received") {
+export default function friendsWannabesReducer(friends = [], action) {
+    if (action.type === "friends-wannabes/received") {
         friends = action.payload.friends;
     }
 
-    // if (action.type === "friends-wannabees/accept") {
-    //     const newFriendsWannabees = friends
-    //         .map
-    //         // do mapping here
-    //         // check if the id of the users matches the id of the user you just clicked
-    //         // if it does, copy user and change accepted to true
-    //         ();
-    // }
+    if (action.type === "friends-wannabes/remove") {
+        friends = friends.filter((friend) => {
+            if (friend.id != action.payload.id) {
+                return friend;
+            }
+        });
+    }
+
+    if (action.type === "friends-wannabes/accept") {
+        friends = friends.map((friend) => {
+            if (friend.id == action.payload.id) {
+                return {
+                    ...friend,
+                    accepted: true,
+                };
+            } else {
+                return friend;
+            }
+        });
+    }
 
     return friends;
 }
 
-export function receiveFriendsAndWannabees(friends) {
+export function receiveFriendsAndWannabes(friends) {
     return {
-        type: "friends-wannabees/received",
+        type: "friends-wannabes/received",
         payload: { friends },
     };
 }
 
 export function makeFriend(id) {
     return {
-        type: "friends-wannabees/accept",
+        type: "friends-wannabes/accept",
         payload: { id },
     };
 }
 
 export function removeFriend(id) {
     return {
-        type: "friends-wannabees/remove",
+        type: "friends-wannabes/remove",
         payload: { id },
     };
 }

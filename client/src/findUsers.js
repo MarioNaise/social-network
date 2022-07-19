@@ -19,7 +19,7 @@ export default function FindUsers() {
                     // console.log("ignore don't run a state update");
                 }
             } catch (err) {
-                console.log("err on fetch");
+                console.log("err on fetch", err);
             }
         })(); // this closes the async iife
         return () => {

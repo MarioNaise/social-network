@@ -290,15 +290,15 @@ button:hover {
 
 /************** FRIENDS ***************/
 
-#friendsAndWannabees * {
+#friendsAndWannabes * {
     font-family: var(--fontSansserif);
 }
 
-#friendsAndWannabees h1 {
+#friendsAndWannabes h1 {
     margin: 1rem;
 }
 
-#friendsAndWannabees img {
+#friendsAndWannabes img {
     width: 7rem;
     height: 7rem;
     object-fit: cover;
