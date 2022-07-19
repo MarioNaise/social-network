@@ -108,6 +108,11 @@ button:hover {
     justify-content: center;
 }
 
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
 /**************************************/
 /************** WELCOME ***************/
 /**************************************/
@@ -303,6 +308,10 @@ button:hover {
     height: 7rem;
     object-fit: cover;
     border-radius: 1rem;
+}
+
+#friendsAndWannabes .friend {
+    margin: 1rem;
 }
 
 /************** FOOTER ***************/

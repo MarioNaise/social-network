@@ -35,12 +35,10 @@ export default function FriendsAndWannabes() {
         })();
     }, []);
 
-    const handleRemove = (id) => {
-        // make a post request to update db
-        // dispatch an action to update global state
+    const handleButton = (action, id) => {
         (async () => {
             try {
-                const respBody = await fetch(`/friendship/remove/${id}`, {
+                const respBody = await fetch(`/friendship/${action}/${id}`, {
                     method: "POST",
                 });
                 const data = await respBody.json();
@@ -49,75 +47,71 @@ export default function FriendsAndWannabes() {
                     return;
                 }
             } catch (err) {
-                console.log("err on fetch friendship", err);
+                console.log("err on fetch handleButton", err);
             }
         })();
-        dispatch(removeFriend(id));
-    };
-
-    const handleAccept = (id) => {
-        (async () => {
-            try {
-                const respBody = await fetch(`/friendship/accept/${id}`, {
-                    method: "POST",
-                });
-                const data = await respBody.json();
-                // console.log("data in fetch friendship: ", data);
-                if (data.success) {
-                    return;
-                }
-            } catch (err) {
-                console.log("err on fetch friendship", err);
-            }
-        })();
-        dispatch(makeFriend(id));
+        if (action === "accept") {
+            dispatch(makeFriend(id));
+        } else {
+            dispatch(removeFriend(id));
+        }
     };
 
     return (
         <section className="container flex">
             <div id="friendsAndWannabes" className="innerContainer">
                 <h1>Current Friends:</h1>
-                {friends &&
-                    friends.map((friend) => {
-                        return (
-                            <div key={friend.id} className="flex">
-                                <Link to={`/user/${friend.id}`}>
-                                    <img
-                                        src={
-                                            friend.profile_picture ||
-                                            "/defaultProfilePic.jpg"
+                <div className="grid">
+                    {friends &&
+                        friends.map((friend) => {
+                            return (
+                                <div key={friend.id} className="flex friend">
+                                    <Link to={`/user/${friend.id}`}>
+                                        <img
+                                            src={
+                                                friend.profile_picture ||
+                                                "/defaultProfilePic.jpg"
+                                            }
+                                        ></img>
+                                        <p>{`${friend.first} ${friend.last}`}</p>
+                                    </Link>
+                                    <button
+                                        onClick={() =>
+                                            handleButton("remove", friend.id)
                                         }
-                                    ></img>
-                                    <p>{`${friend.first} ${friend.last}`}</p>
-                                </Link>
-                                <button onClick={() => handleRemove(friend.id)}>
-                                    Remove Friend
-                                </button>
-                            </div>
-                        );
-                    })}
+                                    >
+                                        Remove Friend
+                                    </button>
+                                </div>
+                            );
+                        })}
+                </div>
                 <h1>Pending Friend Requests:</h1>
-                {wannabes &&
-                    wannabes.map((wannabee) => {
-                        return (
-                            <div key={wannabee.id} className="flex">
-                                <Link to={`/user/${wannabee.id}`}>
-                                    <img
-                                        src={
-                                            wannabee.profile_picture ||
-                                            "/defaultProfilePic.jpg"
+                <div className="grid">
+                    {wannabes &&
+                        wannabes.map((wannabee) => {
+                            return (
+                                <div key={wannabee.id} className="flex friend">
+                                    <Link to={`/user/${wannabee.id}`}>
+                                        <img
+                                            src={
+                                                wannabee.profile_picture ||
+                                                "/defaultProfilePic.jpg"
+                                            }
+                                        ></img>
+                                        <p>{`${wannabee.first} ${wannabee.last}`}</p>
+                                    </Link>
+                                    <button
+                                        onClick={() =>
+                                            handleButton("accept", wannabee.id)
                                         }
-                                    ></img>
-                                    <p>{`${wannabee.first} ${wannabee.last}`}</p>
-                                </Link>
-                                <button
-                                    onClick={() => handleAccept(wannabee.id)}
-                                >
-                                    Accept Friendrequest
-                                </button>
-                            </div>
-                        );
-                    })}
+                                    >
+                                        Accept Friendrequest
+                                    </button>
+                                </div>
+                            );
+                        })}
+                </div>
             </div>
         </section>
     );
