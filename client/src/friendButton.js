@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 
 export default function FriendButton(props) {
     const [buttonText, setButtonText] = useState("");
-    const [action, setAction] = useState("");
 
     // check friendship status between users
     useEffect(() => {
@@ -14,25 +13,21 @@ export default function FriendButton(props) {
                 if (data.noRelation === true) {
                     // console.log("case 1");
                     setButtonText("Add Friend");
-                    setAction("add");
                 } else if (data.accepted == true) {
                     // console.log("case 2");
                     setButtonText("Remove Friend");
-                    setAction("remove");
                 } else if (
                     data.accepted === false &&
                     data.sender_id != props.viewedUserId
                 ) {
                     // console.log("case 3");
                     setButtonText("Cancel Friendrequest");
-                    setAction("cancel");
                 } else if (
                     data.accepted === false &&
                     data.sender_id == props.viewedUserId
                 ) {
                     // console.log("case 4");
                     setButtonText("Accept Friendrequest");
-                    setAction("accept");
                 }
             } catch (err) {
                 console.log("err on fetch relation: ", err);
@@ -41,6 +36,11 @@ export default function FriendButton(props) {
     }, []);
 
     const submitFriendRequest = (oldButtonText) => {
+        const action =
+            (oldButtonText === "Add Friend" && "add") ||
+            (oldButtonText === "Remove Friend" && "remove") ||
+            (oldButtonText === "Cancel Friendrequest" && "cancel") ||
+            (oldButtonText === "Accept Friendrequest" && "accept");
         const newButtonText =
             (oldButtonText === "Add Friend" && "Cancel Friendrequest") ||
             (oldButtonText === "Remove Friend" && "Add Friend") ||
