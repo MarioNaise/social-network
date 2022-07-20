@@ -151,7 +151,25 @@ module.exports.findFriends = (id) => {
         JOIN users
         ON (accepted = false AND recipient_id = $1 AND sender_id = users.id)
         OR (accepted = true AND recipient_id = $1 AND sender_id = users.id)
-        OR (accepted = true AND sender_id = $1 AND recipient_id = users.id);`,
+        OR (accepted = true AND sender_id = $1 AND recipient_id = users.id)
+        ORDER BY users.last;`,
         [id]
     );
+};
+
+// get friends and friend requests so i dont have to do it manually all the time
+module.exports.getFamous = (recipient, sender, action) => {
+    if (action == "requests") {
+        return db.query(
+            `INSERT INTO friendships (sender_id, recipient_id)
+                VALUES ($2, $1);`,
+            [recipient, sender]
+        );
+    } else {
+        return db.query(
+            `INSERT INTO friendships (sender_id, recipient_id, accepted)
+                VALUES ($2, $1, true);`,
+            [recipient, sender]
+        );
+    }
 };

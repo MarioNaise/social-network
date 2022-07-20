@@ -145,6 +145,29 @@ app.get("/api/friends", (req, res) => {
         });
 });
 
+// get friends and friend requests so i dont have to do it manually all the time
+app.get("/easteregg/get/famous", (req, res) => {
+    for (let i = 20; i < 23; i++) {
+        db.getFamous(req.session.userId, i, "requests")
+            .then(() => {
+                // console.log("result.rows", result.rows);
+            })
+            .catch((err) => {
+                console.log("err in getFamous#1", err);
+            });
+    }
+    for (let i = 30; i < 36; i++) {
+        db.getFamous(req.session.userId, i, "friends")
+            .then(() => {
+                // console.log("result.rows", result.rows);
+            })
+            .catch((err) => {
+                console.log("err in getFamous#2", err);
+            });
+    }
+    res.redirect("/friends");
+});
+
 app.get("/logout", (req, res) => {
     req.session = null;
     res.redirect("/");

@@ -31,6 +31,14 @@ export default function friendsWannabesReducer(friends = [], action) {
         });
     }
 
+    if (action.type === "friends-wannabes/reject") {
+        friends = friends.filter((friend) => {
+            if (friend.id != action.payload.id) {
+                return friend;
+            }
+        });
+    }
+
     return friends;
 }
 
@@ -51,6 +59,13 @@ export function makeFriend(id) {
 export function removeFriend(id) {
     return {
         type: "friends-wannabes/remove",
+        payload: { id },
+    };
+}
+
+export function rejectFriend(id) {
+    return {
+        type: "friends-wannabes/reject",
         payload: { id },
     };
 }

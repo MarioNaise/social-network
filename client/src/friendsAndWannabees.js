@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import {
     makeFriend,
     removeFriend,
+    rejectFriend,
     receiveFriendsAndWannabes,
 } from "./redux/friends/slice";
 
@@ -52,14 +53,51 @@ export default function FriendsAndWannabes() {
         })();
         if (action === "accept") {
             dispatch(makeFriend(id));
-        } else {
+        } else if (action == "remove") {
             dispatch(removeFriend(id));
+        } else {
+            dispatch(rejectFriend(id));
         }
     };
 
     return (
         <section className="container flex">
             <div id="friendsAndWannabes" className="innerContainer">
+                {(wannabes[0] && <h1>Pending Friend Requests:</h1>) || (
+                    <h1>No Pending Friend Requests</h1>
+                )}
+                <div className="grid">
+                    {wannabes &&
+                        wannabes.map((wannabee) => {
+                            return (
+                                <div key={wannabee.id} className="flex friend">
+                                    <Link to={`/user/${wannabee.id}`}>
+                                        <img
+                                            src={
+                                                wannabee.profile_picture ||
+                                                "/defaultProfilePic.jpg"
+                                            }
+                                        ></img>
+                                        <p>{`${wannabee.first} ${wannabee.last}`}</p>
+                                    </Link>
+                                    <button
+                                        onClick={() =>
+                                            handleButton("accept", wannabee.id)
+                                        }
+                                    >
+                                        Accept Friendrequest
+                                    </button>
+                                    <button
+                                        onClick={() =>
+                                            handleButton("cancel", wannabee.id)
+                                        }
+                                    >
+                                        Reject Friendrequest
+                                    </button>
+                                </div>
+                            );
+                        })}
+                </div>
                 <h1>Current Friends:</h1>
                 <div className="grid">
                     {friends &&
@@ -81,32 +119,6 @@ export default function FriendsAndWannabes() {
                                         }
                                     >
                                         Remove Friend
-                                    </button>
-                                </div>
-                            );
-                        })}
-                </div>
-                <h1>Pending Friend Requests:</h1>
-                <div className="grid">
-                    {wannabes &&
-                        wannabes.map((wannabee) => {
-                            return (
-                                <div key={wannabee.id} className="flex friend">
-                                    <Link to={`/user/${wannabee.id}`}>
-                                        <img
-                                            src={
-                                                wannabee.profile_picture ||
-                                                "/defaultProfilePic.jpg"
-                                            }
-                                        ></img>
-                                        <p>{`${wannabee.first} ${wannabee.last}`}</p>
-                                    </Link>
-                                    <button
-                                        onClick={() =>
-                                            handleButton("accept", wannabee.id)
-                                        }
-                                    >
-                                        Accept Friendrequest
                                     </button>
                                 </div>
                             );
