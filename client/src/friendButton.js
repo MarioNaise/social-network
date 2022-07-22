@@ -35,7 +35,7 @@ export default function FriendButton(props) {
         })();
     }, []);
 
-    const submitFriendRequest = (oldButtonText) => {
+    const submitFriendRequest = async (oldButtonText) => {
         const action =
             (oldButtonText === "Add Friend" && "add") ||
             (oldButtonText === "Remove Friend" && "remove") ||
@@ -46,23 +46,22 @@ export default function FriendButton(props) {
             (oldButtonText === "Remove Friend" && "Add Friend") ||
             (oldButtonText === "Cancel Friendrequest" && "Add Friend") ||
             (oldButtonText === "Accept Friendrequest" && "Remove Friend");
-        (async () => {
-            try {
-                const respBody = await fetch(
-                    `/friendship/${action}/${props.viewedUserId}`,
-                    {
-                        method: "POST",
-                    }
-                );
-                const data = await respBody.json();
-                // console.log("data in fetch friendship: ", data);
-                if (data.success) {
-                    setButtonText(newButtonText);
+
+        try {
+            const respBody = await fetch(
+                `/friendship/${action}/${props.viewedUserId}`,
+                {
+                    method: "POST",
                 }
-            } catch (err) {
-                console.log("err on fetch friendship", err);
+            );
+            const data = await respBody.json();
+            // console.log("data in fetch friendship: ", data);
+            if (data.success) {
+                setButtonText(newButtonText);
             }
-        })();
+        } catch (err) {
+            console.log("err on fetch friendship", err);
+        }
     };
 
     return (

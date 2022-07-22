@@ -8,7 +8,7 @@ export default function Time() {
         setTime(dateTime.toLocaleTimeString().slice(0, 8));
     }, 1000);
     return (
-        <p id="time" className="flexStart">
+        <p id="time" className="flex">
             {time}
         </p>
     );

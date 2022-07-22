@@ -8,6 +8,7 @@ import OtherProfile from "./otherProfile";
 import FindUsers from "./findUsers";
 import Time from "./time";
 import FriendsAndWannabes from "./friendsAndWannabees.js";
+import Chat from "./chat";
 
 export default class App extends Component {
     constructor() {
@@ -128,6 +129,11 @@ export default class App extends Component {
                                 Friends
                             </Link>
                         </div>
+                        <div>
+                            <Link className="link pointer" to="/chat">
+                                Chat
+                            </Link>
+                        </div>
                     </nav>
                     <Switch>
                         <Route exact path="/">
@@ -149,6 +155,9 @@ export default class App extends Component {
                                     }}
                                 />
                             )}
+                        </Route>
+                        <Route path="/chat">
+                            <Chat />
                         </Route>
                         <Route path="/users/find">
                             <FindUsers />

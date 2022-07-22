@@ -36,27 +36,24 @@ export default function FriendsAndWannabes() {
         })();
     }, []);
 
-    const handleButton = (action, id) => {
-        (async () => {
-            try {
-                const respBody = await fetch(`/friendship/${action}/${id}`, {
-                    method: "POST",
-                });
-                const data = await respBody.json();
-                // console.log("data in fetch friendship: ", data);
-                if (data.success) {
-                    return;
+    const handleButton = async (action, id) => {
+        try {
+            const respBody = await fetch(`/friendship/${action}/${id}`, {
+                method: "POST",
+            });
+            const data = await respBody.json();
+            // console.log("data in fetch friendship: ", data);
+            if (data.success) {
+                if (action === "accept") {
+                    dispatch(makeFriend(id));
+                } else if (action == "remove") {
+                    dispatch(removeFriend(id));
+                } else {
+                    dispatch(rejectFriend(id));
                 }
-            } catch (err) {
-                console.log("err on fetch handleButton", err);
             }
-        })();
-        if (action === "accept") {
-            dispatch(makeFriend(id));
-        } else if (action == "remove") {
-            dispatch(removeFriend(id));
-        } else {
-            dispatch(rejectFriend(id));
+        } catch (err) {
+            console.log("err on fetch handleButton", err);
         }
     };
 

@@ -1,5 +1,6 @@
 const express = require("express");
-const app = express();
+const app = (exports.app = express());
+const server = require("http").Server(app);
 const compression = require("compression");
 const path = require("path");
 const db = require("./db");
@@ -10,9 +11,10 @@ const cryptoRandomString = require("crypto-random-string");
 const multer = require("multer");
 const uidSafe = require("uid-safe");
 const s3 = require("./s3");
-
-const COOKIE_SECRET =
-    process.env.COOKIE_SECRET || require("./secrets.json").COOKIE_SECRET;
+const io = require("socket.io")(server, {
+    allowRequest: (req, callback) =>
+        callback(null, req.headers.referer.startsWith("http://localhost:3000")),
+});
 
 ////////////////////////////////////////////////////////
 ////////////////////// MIDDLEWARE //////////////////////
@@ -29,13 +31,18 @@ app.use(
 );
 app.use(express.json());
 
-app.use(
-    cookieSession({
-        secret: COOKIE_SECRET,
-        maxAge: 1000 * 60 * 60 * 24 * 14,
-        sameSite: true,
-    })
-);
+const COOKIE_SECRET =
+    process.env.COOKIE_SECRET || require("./secrets.json").COOKIE_SECRET;
+const cookieSessionMiddleware = cookieSession({
+    secret: COOKIE_SECRET,
+    maxAge: 1000 * 60 * 60 * 24 * 14,
+    sameSite: true,
+});
+app.use(cookieSessionMiddleware);
+
+io.use((socket, next) => {
+    cookieSessionMiddleware(socket.request, socket.request.res, next);
+});
 
 if (process.env.NODE_ENV == "production") {
     app.use((req, res, next) => {
@@ -101,7 +108,7 @@ app.get("/findusers/", (req, res) => {
     db.findNewUsers()
         .then((result) => {
             // console.log(result.rows);
-            res.json(result.rows);
+            res.json({ users: result.rows, recent: true });
         })
         .catch((err) => {
             console.log("err in findNewUsers: ", err);
@@ -112,7 +119,7 @@ app.get("/findusers/:search", (req, res) => {
     db.findUsers(req.params.search)
         .then((result) => {
             // console.log(result.rows);
-            res.json(result.rows);
+            res.json({ users: result.rows, recent: false });
         })
         .catch((err) => {
             console.log("err in findUsers: ", err);
@@ -147,23 +154,25 @@ app.get("/api/friends", (req, res) => {
 
 // get friends and friend requests so i dont have to do it manually all the time
 app.get("/easteregg/get/famous", (req, res) => {
-    for (let i = 20; i < 23; i++) {
-        db.getFamous(req.session.userId, i, "requests")
-            .then(() => {
-                // console.log("result.rows", result.rows);
-            })
-            .catch((err) => {
-                console.log("err in getFamous#1", err);
-            });
-    }
-    for (let i = 30; i < 36; i++) {
-        db.getFamous(req.session.userId, i, "friends")
-            .then(() => {
-                // console.log("result.rows", result.rows);
-            })
-            .catch((err) => {
-                console.log("err in getFamous#2", err);
-            });
+    if (req.session.userId === 1) {
+        for (let i = 20; i < 23; i++) {
+            db.getFamous(req.session.userId, i, "requests")
+                .then(() => {
+                    // console.log("result.rows", result.rows);
+                })
+                .catch((err) => {
+                    console.log("err in getFamous#1", err);
+                });
+        }
+        for (let i = 30; i < 36; i++) {
+            db.getFamous(req.session.userId, i, "friends")
+                .then(() => {
+                    // console.log("result.rows", result.rows);
+                })
+                .catch((err) => {
+                    console.log("err in getFamous#2", err);
+                });
+        }
     }
     res.redirect("/friends");
 });
@@ -397,6 +406,52 @@ app.get("*", function (req, res) {
 //////////////////////   LISTEN   //////////////////////
 ////////////////////////////////////////////////////////
 
-app.listen(process.env.PORT || 3001, function () {
+server.listen(process.env.PORT || 3001, function () {
     console.log(`I'm listening.`);
+    // because sockets cant use an express serverm we need
+    // to have the listening to be done by a node server
+});
+
+////////////////////////////////////////////////////////
+//////////////////////   SOCKET   //////////////////////
+////////////////////////////////////////////////////////
+
+io.on("connection", function (socket) {
+    if (!socket.request.session.userId) {
+        return socket.disconnect(true);
+    }
+    const userId = socket.request.session.userId;
+    // console.log(
+    //     `user with id ${userId} and socket.id ${socket.id} just connected`
+    // );
+
+    // in here we do our emitting on every new connection! Like when the user
+    // first connects we want to send them the chat history
+    // 1. get the messages from the database
+    db.getChatHistory()
+        .then((result) => {
+            // 2. send them over to the socket that just connected
+
+            socket.emit("chatMessages", result.rows);
+        })
+        .catch((err) => {
+            console.log("err in getChatHistory: ", err);
+        });
+
+    socket.on("new-message", (newMsg) => {
+        // console.log("SERVER: received a new msg from client: ", newMsg);
+        // 1. we want to know who sent the msg
+        // console.log("SERVER: author of the msg was user: ", userId);
+        // 2. we need to add this msg to the chat table
+        db.addMessageToChat(userId, newMsg)
+            .then((result) => {
+                io.sockets.emit("add-new-message", result.rows);
+            })
+            .catch((err) => {
+                console.log("err in addMessageToChat: ", err);
+            });
+        // 3. we want to retrieve user info about the author
+        // 4. compose a msg obj that contains user info and messages
+        // 5. send back to all connect sockets
+    });
 });

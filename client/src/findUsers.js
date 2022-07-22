@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 export default function FindUsers() {
     const [users, setUsers] = useState([]);
     const [searchInput, setSearchInput] = useState("");
+    const [recent, setRecent] = useState(null);
 
     useEffect(() => {
         let abort = false;
@@ -14,7 +15,12 @@ export default function FindUsers() {
                 const data = await respBody.json();
                 // console.log("data: ", data);
                 if (!abort) {
-                    setUsers(data);
+                    setUsers(data.users);
+                    if (data.recent === true) {
+                        setRecent(true);
+                    } else {
+                        setRecent(false);
+                    }
                 } else {
                     // console.log("ignore don't run a state update");
                 }
@@ -40,10 +46,12 @@ export default function FindUsers() {
                         setSearchInput(e.target.value);
                     }}
                 ></input>
-                <ul>
+                {recent && <h3>Recetly joined:</h3>}
+                {!recent && <h3>Search results:</h3>}
+                <div className="grid">
                     {users?.map((user, i) => {
                         return (
-                            <li key={i}>
+                            <div key={i} className="flex user">
                                 <Link to={`/user/${user.id}`}>
                                     <img
                                         src={
@@ -53,10 +61,10 @@ export default function FindUsers() {
                                     ></img>
                                     <p>{`${user.first} ${user.last}`}</p>
                                 </Link>
-                            </li>
+                            </div>
                         );
                     })}
-                </ul>
+                </div>
             </div>
         </section>
     );

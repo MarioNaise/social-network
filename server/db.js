@@ -95,7 +95,7 @@ module.exports.findUsers = (val) => {
         FROM users
         WHERE first ILIKE $1
         OR last ILIKE $1
-        LIMIT 4;`,
+        LIMIT 9;`,
         [val + "%"]
     );
 };
@@ -105,7 +105,7 @@ module.exports.findNewUsers = () => {
         `SELECT id, first, last, bio, profile_picture
         FROM users
         ORDER BY id DESC
-        LIMIT 4;`
+        LIMIT 9;`
     );
 };
 
@@ -154,6 +154,24 @@ module.exports.findFriends = (id) => {
         OR (accepted = true AND sender_id = $1 AND recipient_id = users.id)
         ORDER BY users.last;`,
         [id]
+    );
+};
+
+module.exports.getChatHistory = () => {
+    return db.query(
+        `SELECT * 
+        FROM chat
+        ORDER BY id DESC
+        LIMIT 10;`
+    );
+};
+
+module.exports.addMessageToChat = (user_id, message) => {
+    return db.query(
+        `INSERT INTO chat (user_id, message)
+         VALUES ($1, $2)
+         RETURNING *;`,
+        [user_id, message]
     );
 };
 

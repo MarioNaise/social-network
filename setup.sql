@@ -24,3 +24,11 @@ CREATE TABLE friendships(
    recipient_id INT REFERENCES users(id) NOT NULL,
    accepted BOOLEAN DEFAULT false
 );
+
+DROP TABLE IF EXISTS chat;
+CREATE TABLE chat(
+   id SERIAL PRIMARY KEY,
+   user_id INT NOT NULL,
+   message TEXT NOT NULL CHECK (message != ''),
+   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

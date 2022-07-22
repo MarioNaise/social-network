@@ -6,6 +6,7 @@ import * as immutableState from "redux-immutable-state-invariant";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { Provider } from "react-redux";
 import rootReducer from "./redux/reducer";
+import { init } from "./socket";
 
 const store = createStore(
     rootReducer,
@@ -18,6 +19,8 @@ fetch("/user/id.json")
         if (!data.userId) {
             ReactDOM.render(<Welcome />, document.querySelector("main"));
         } else {
+            // initialise web socket and pass store to it
+            init(store);
             ReactDOM.render(
                 <Provider store={store}>
                     <App />
