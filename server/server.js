@@ -416,7 +416,7 @@ server.listen(process.env.PORT || 3001, function () {
 //////////////////////   SOCKET   //////////////////////
 ////////////////////////////////////////////////////////
 
-io.on("connection", function (socket) {
+io.on("connection", async (socket) => {
     if (!socket.request.session.userId) {
         return socket.disconnect(true);
     }
@@ -428,24 +428,31 @@ io.on("connection", function (socket) {
     // in here we do our emitting on every new connection! Like when the user
     // first connects we want to send them the chat history
     // 1. get the messages from the database
-    db.getChatHistory()
-        .then((result) => {
-            // 2. send them over to the socket that just connected
-
-            socket.emit("chatMessages", result.rows);
-        })
-        .catch((err) => {
-            console.log("err in getChatHistory: ", err);
-        });
+    try {
+        let result = await db.getChatHistory();
+        socket.emit("chatMessages", result.rows);
+    } catch (err) {
+        console.log("err in getChatHistory", err);
+    }
+    // 2. send them over to the socket that just connected
 
     socket.on("new-message", (newMsg) => {
-        // console.log("SERVER: received a new msg from client: ", newMsg);
         // 1. we want to know who sent the msg
-        // console.log("SERVER: author of the msg was user: ", userId);
-        // 2. we need to add this msg to the chat table
         db.addMessageToChat(userId, newMsg)
             .then((result) => {
-                io.sockets.emit("add-new-message", result.rows);
+                db.getUserInfo(userId)
+                    .then((userResult) => {
+                        // 2. we need to add this msg to the chat table
+                        io.sockets.emit("add-new-message", [
+                            {
+                                ...userResult.rows[0],
+                                ...result.rows[0],
+                            },
+                        ]);
+                    })
+                    .catch((err) => {
+                        console.log("err in getUserInfo socket: ", err);
+                    });
             })
             .catch((err) => {
                 console.log("err in addMessageToChat: ", err);

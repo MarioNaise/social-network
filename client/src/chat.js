@@ -30,7 +30,23 @@ export default function Chat() {
                         {messages &&
                             messages.map((message) => {
                                 return (
-                                    <div key={message.id}>
+                                    <div
+                                        key={message.id}
+                                        className="message flexStart"
+                                    >
+                                        {message.profile_picture && (
+                                            <img
+                                                src={
+                                                    message.profile_picture ||
+                                                    "defaultProfilePic.jpg"
+                                                }
+                                            ></img>
+                                        )}
+                                        {message.first && (
+                                            <p className="name">
+                                                {message.first} {message.last}
+                                            </p>
+                                        )}
                                         <p>{message.message}</p>
                                         <p className="time">
                                             {message.created_at.slice(11, 16) +

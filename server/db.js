@@ -159,9 +159,11 @@ module.exports.findFriends = (id) => {
 
 module.exports.getChatHistory = () => {
     return db.query(
-        `SELECT * 
+        `SELECT chat.id, chat.user_id, chat.message, chat.created_at, users.first, users.last, users.profile_picture
         FROM chat
-        ORDER BY id DESC
+        LEFT JOIN users
+        ON users.id = chat.user_id
+        ORDER BY chat.id DESC
         LIMIT 10;`
     );
 };
