@@ -1,5 +1,6 @@
 import { Component } from "react";
 import BioEditor from "./bioEditor";
+import { Link } from "react-router-dom";
 
 export default class Profile extends Component {
     constructor(props) {
@@ -16,7 +17,7 @@ export default class Profile extends Component {
                     </h1>
 
                     <img
-                        src={this.props.imageUrl || "defaultProfilePic.jpg"}
+                        src={this.props.imageUrl || "/defaultProfilePic.jpg"}
                         alt={this.props.first + this.props.last}
                     />
                     <BioEditor
@@ -28,6 +29,10 @@ export default class Profile extends Component {
                     <a className="link logout pointer" href="/logout">
                         Logout
                     </a>
+
+                    <Link className="link pointer delete" to="/delete">
+                        Delete Profile
+                    </Link>
                 </div>
             </section>
         );

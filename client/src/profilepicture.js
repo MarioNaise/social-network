@@ -9,7 +9,7 @@ export default function ProfilePicture({ first, last, imageUrl, toggleModal }) {
                 <img
                     onClick={() => toggleModal()}
                     className="profilePic"
-                    src={imageUrl}
+                    src={imageUrl || "defaultProfilePic.jpg"}
                     alt={first + last}
                 />
             </Link>

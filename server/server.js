@@ -182,6 +182,40 @@ app.get("/logout", (req, res) => {
     res.redirect("/");
 });
 
+app.get("/delete/user", s3.deleteImg, (req, res) => {
+    db.deleteChat(req.session.userId)
+        .then(() => {
+            // console.log("deleted user from chat");
+
+            db.deleteFriendships(req.session.userId)
+                .then(() => {
+                    // console.log("deleted user from friendships");
+                    db.deleteCodes(req.session.email)
+                        .then(() => {
+                            // console.log("deleted user from reset_codes");
+                            db.deleteUser(req.session.userId)
+                                .then(() => {
+                                    // console.log("deleted user from users");
+                                    req.session = null;
+                                    res.redirect("/");
+                                })
+                                .catch((err) => {
+                                    console.log(("err in delete user :", err));
+                                });
+                        })
+                        .catch((err) => {
+                            console.log(("err in delete codes :", err));
+                        });
+                })
+                .catch((err) => {
+                    console.log(("err in delete friendships :", err));
+                });
+        })
+        .catch((err) => {
+            console.log(("err in delete chat :", err));
+        });
+});
+
 ////////////////////////////////////////////////////////
 ////////////////////   POST ROUTES   ///////////////////
 ////////////////////////////////////////////////////////
@@ -220,6 +254,9 @@ app.post("/login", (req, res) => {
                     .then((isCorrect) => {
                         if (isCorrect) {
                             req.session.userId = result.rows[0].id;
+                            req.session.profilePicture =
+                                result.rows[0].profile_picture.slice(36);
+                            req.session.email = result.rows[0].email;
                             res.json(result.rows[0]);
                         } else {
                             res.json({ error: true });
@@ -345,7 +382,7 @@ app.post("/friendship/:action/:viewedId", (req, res) => {
 });
 
 /////////////////////////////////////////////////////////////////
-//////////////////////   PROFILE    /////////////////////////////
+//////////////////////    UPLOAD    /////////////////////////////
 /////////////////////////////////////////////////////////////////
 const storage = multer.diskStorage({
     destination(req, file, callback) {
@@ -367,10 +404,21 @@ const uploader = multer({
 
 app.post(
     "/upload/profile/picture",
+    (req, res, next) => {
+        db.deleteImage(req.session.userId)
+            .then(() => {
+                next();
+            })
+            .catch((err) => {
+                console.log("err in delete Image: ", err);
+            });
+    },
+    s3.deleteImg,
     uploader.single("image"),
     s3.upload,
     (req, res) => {
         // console.log("req.file in server.js: ", req.file);
+        req.session.profilePicture = req.file.filename;
         db.uploadProfilePicture(
             "https://s3.amazonaws.com/spicedling/" + req.file.filename,
             req.session.userId

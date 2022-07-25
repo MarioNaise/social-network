@@ -78,6 +78,11 @@ textarea {
     font-family: var(--fontSansserif);
 }
 
+textarea:focus {
+    outline: none;
+    box-shadow: 1px 1px 5px 2px var(--boxShadow);
+}
+
 .link {
     font-size: 1rem;
     font-family: var(--fontSansserif);
@@ -239,6 +244,12 @@ textarea {
     right: 0;
 }
 
+.delete {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
 /************** UPLAODER ***************/
 
 #uploader * {
@@ -356,12 +367,23 @@ textarea {
 }
 
 #chatMessages .name {
-    text-decoration: underline;
     font-weight: bold;
+    font-family: var(--fontDefault);
 }
 
 #chatMessages .message {
     justify-content: center;
+}
+
+/************** DELETE ***************/
+
+#app #deleteProfile h3 {
+    font-family: var(--fontSansserif);
+}
+
+#app #deleteProfile .link {
+    position: relative;
+    display: block;
 }
 
 /************** FOOTER ***************/
@@ -375,4 +397,24 @@ textarea {
 
 #app footer * {
     padding-left: 1rem;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --textColor: white;
+        --backgroundHeader: #4a5672;
+        --backgroundNav: #596787;
+        --backgroundDefault: #8192b9;
+        --backgroundColor: #596787;
+        --backgroundFooter: var(--backgroundHeader);
+        --borderColor: var(--textColor);
+    }
+    button,
+    input,
+    textarea {
+        color: black;
+    }
+    button:hover {
+        color: white;
+    }
 }

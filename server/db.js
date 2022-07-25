@@ -17,7 +17,8 @@ module.exports.registerUser = (first, last, email, password) => {
 };
 
 module.exports.loginUser = (email) => {
-    const q = `SELECT password, id FROM users
+    const q = `SELECT password, id, profile_picture
+                FROM users
                 WHERE email = $1;`;
     const param = [email];
     return db.query(q, param);
@@ -62,7 +63,7 @@ module.exports.updatePassword = (email, password) => {
 
 module.exports.getUserInfo = (userId) => {
     return db.query(
-        `SELECT id, first, last, bio, profile_picture 
+        `SELECT id, first, last, bio, profile_picture, email
         FROM users
         WHERE id = $1;`,
         [userId]
@@ -162,7 +163,7 @@ module.exports.getChatHistory = () => {
         `SELECT chat.id, chat.user_id, chat.message, chat.created_at, users.first, users.last, users.profile_picture
         FROM chat
         LEFT JOIN users
-        ON users.id = chat.user_id
+        ON chat.user_id = users.id
         ORDER BY chat.id DESC
         LIMIT 10;`
     );
@@ -171,9 +172,49 @@ module.exports.getChatHistory = () => {
 module.exports.addMessageToChat = (user_id, message) => {
     return db.query(
         `INSERT INTO chat (user_id, message)
-         VALUES ($1, $2)
-         RETURNING *;`,
+        VALUES ($1, $2)
+        RETURNING *;`,
         [user_id, message]
+    );
+};
+
+module.exports.deleteImage = (userId) => {
+    return db.query(
+        `UPDATE users
+        SET profile_picture = ''
+        WHERE id = $1;`,
+        [userId]
+    );
+};
+
+module.exports.deleteChat = (userId) => {
+    return db.query(
+        `DELETE FROM chat
+        WHERE user_id = $1;`,
+        [userId]
+    );
+};
+
+module.exports.deleteFriendships = (userId) => {
+    return db.query(
+        `DELETE FROM friendships
+        WHERE (sender_id = $1 OR recipient_id = $1);`,
+        [userId]
+    );
+};
+
+module.exports.deleteCodes = (email) => {
+    return db.query(
+        `DELETE FROM reset_codes
+        WHERE email = $1;`,
+        [email]
+    );
+};
+module.exports.deleteUser = (userId) => {
+    return db.query(
+        `DELETE FROM users
+        WHERE id = $1;`,
+        [userId]
     );
 };
 

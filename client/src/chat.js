@@ -34,32 +34,34 @@ export default function Chat() {
                                         key={message.id}
                                         className="message flexStart"
                                     >
-                                        {message.profile_picture && (
+                                        {(message.profile_picture && (
                                             <img
-                                                src={
-                                                    message.profile_picture ||
-                                                    "defaultProfilePic.jpg"
-                                                }
+                                                src={message.profile_picture}
                                             ></img>
+                                        )) || (
+                                            <img src="/defaultProfilePic.jpg"></img>
                                         )}
                                         {message.first && (
                                             <p className="name">
-                                                {message.first} {message.last}
+                                                {message.first} {message.last}:
                                             </p>
                                         )}
                                         <p>{message.message}</p>
                                         <p className="time">
-                                            {message.created_at.slice(11, 16) +
-                                                " / "}
-                                            {message.created_at.slice(0, 10)}
+                                            {new Date(
+                                                message.created_at
+                                            ).toLocaleString()}
                                         </p>
                                     </div>
                                 );
                             })}
                     </div>
+                    <p>Write a chat message:</p>
                     <textarea
                         onKeyDown={keyCheck}
                         placeholder="Add message..."
+                        rows="5"
+                        cols="50"
                     ></textarea>
                 </div>
             </div>

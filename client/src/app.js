@@ -9,6 +9,7 @@ import FindUsers from "./findUsers";
 import Time from "./time";
 import FriendsAndWannabes from "./friendsAndWannabees.js";
 import Chat from "./chat";
+import Delete from "./delete";
 
 export default class App extends Component {
     constructor() {
@@ -167,6 +168,9 @@ export default class App extends Component {
                         </Route>
                         <Route path="/friends">
                             <FriendsAndWannabes />
+                        </Route>
+                        <Route path="/delete">
+                            <Delete />
                         </Route>
                     </Switch>
                 </BrowserRouter>

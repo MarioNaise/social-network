@@ -15,7 +15,7 @@ const s3 = new aws.S3({
 
 module.exports.upload = (req, res, next) => {
     if (!req.file) {
-        console.log("no file on req.body");
+        // console.log("no file on req.body");
         return res.sendStatus(500);
     }
 
@@ -42,4 +42,32 @@ module.exports.upload = (req, res, next) => {
         .catch((err) => {
             console.log("something went wrong with the cloud upload: ", err);
         });
+};
+
+module.exports.deleteImg = (req, res, next) => {
+    const file = req.session.profilePicture;
+    // console.log("file to delete: ", file);
+
+    if (file) {
+        const promise = s3
+            .deleteObject({
+                Bucket: "spicedling",
+                Key: file,
+            })
+            .promise();
+
+        promise
+            .then(() => {
+                // console.log("it worked, our image is deleted");
+                next();
+            })
+            .catch((err) => {
+                console.log(
+                    "something went wrong with the image deletion: ",
+                    err
+                );
+            });
+    } else {
+        next();
+    }
 };

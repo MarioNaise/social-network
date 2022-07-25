@@ -32,3 +32,4 @@ CREATE TABLE chat(
    message TEXT NOT NULL CHECK (message != ''),
    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+

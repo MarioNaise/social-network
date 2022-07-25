@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import { Component } from "react";
 
 export default class BioEditor extends Component {
