@@ -26,9 +26,6 @@ export default class Profile extends Component {
                             this.props.submitBioInApp(bio);
                         }}
                     />
-                    <a className="link logout pointer" href="/logout">
-                        Logout
-                    </a>
 
                     <Link className="link pointer delete" to="/delete">
                         Delete Profile

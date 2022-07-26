@@ -238,15 +238,9 @@ textarea:focus {
     border-radius: 1rem;
 }
 
-.logout {
-    position: absolute;
-    top: 0;
-    right: 0;
-}
-
 .delete {
     position: absolute;
-    bottom: 0;
+    top: 0;
     right: 0;
 }
 

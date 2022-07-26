@@ -78,79 +78,129 @@ app.get("/user/info", (req, res) => {
         });
 });
 
-app.get("/user/profile/:id", (req, res) => {
-    if (req.params.id == req.session.userId) {
-        return res.json({
-            ownProfile: true,
-            ownId: req.session.userId,
-        });
-    }
-    db.getUserInfo(req.params.id)
-        .then((result) => {
-            if (result.rows[0]) {
-                res.json({
-                    profile: result.rows[0],
-                });
-            } else {
-                console.log("no user found");
-                res.json({ noUser: true });
-            }
-        })
-        .catch((err) => {
-            console.log("err in getUserInfo: ", err);
-            res.json({
-                error: true,
+app.get(
+    "/user/profile/:id",
+    (req, res, next) => {
+        if (req.session.userId) {
+            next();
+        } else {
+            res.sendStatus(403);
+        }
+    },
+    (req, res) => {
+        if (req.params.id == req.session.userId) {
+            return res.json({
+                ownProfile: true,
+                ownId: req.session.userId,
             });
-        });
-});
+        }
+        db.getUserInfo(req.params.id)
+            .then((result) => {
+                if (result.rows[0]) {
+                    res.json({
+                        profile: result.rows[0],
+                    });
+                } else {
+                    console.log("no user found");
+                    res.json({ noUser: true });
+                }
+            })
+            .catch((err) => {
+                console.log("err in getUserInfo: ", err);
+                res.json({
+                    error: true,
+                });
+            });
+    }
+);
 
-app.get("/findusers/", (req, res) => {
-    db.findNewUsers()
-        .then((result) => {
-            // console.log(result.rows);
-            res.json({ users: result.rows, recent: true });
-        })
-        .catch((err) => {
-            console.log("err in findNewUsers: ", err);
-        });
-});
+app.get(
+    "/findusers/",
+    (req, res, next) => {
+        if (req.session.userId) {
+            next();
+        } else {
+            res.sendStatus(403);
+        }
+    },
+    (req, res) => {
+        db.findNewUsers()
+            .then((result) => {
+                // console.log(result.rows);
+                res.json({ users: result.rows, recent: true });
+            })
+            .catch((err) => {
+                console.log("err in findNewUsers: ", err);
+            });
+    }
+);
 
-app.get("/findusers/:search", (req, res) => {
-    db.findUsers(req.params.search)
-        .then((result) => {
-            // console.log(result.rows);
-            res.json({ users: result.rows, recent: false });
-        })
-        .catch((err) => {
-            console.log("err in findUsers: ", err);
-        });
-});
+app.get(
+    "/findusers/:search",
+    (req, res, next) => {
+        if (req.session.userId) {
+            next();
+        } else {
+            res.sendStatus(403);
+        }
+    },
+    (req, res) => {
+        db.findUsers(req.params.search)
+            .then((result) => {
+                // console.log(result.rows);
+                res.json({ users: result.rows, recent: false });
+            })
+            .catch((err) => {
+                console.log("err in findUsers: ", err);
+            });
+    }
+);
 
-app.get("/relation/:viewedId", (req, res) => {
-    db.friendshipStatus(req.session.userId, parseInt(req.params.viewedId))
-        .then((result) => {
-            // console.log("relation: ", result.rows[0]);
-            if (result.rows[0]) {
-                res.json(result.rows[0]);
-            } else {
-                res.json({ noRelation: true });
-            }
-        })
-        .catch((err) => {
-            console.log("err in friendshipStatus: ", err);
-        });
-});
+app.get(
+    "/relation/:viewedId",
+    (req, res, next) => {
+        if (req.session.userId) {
+            next();
+        } else {
+            res.sendStatus(403);
+        }
+    },
+    (req, res) => {
+        db.friendshipStatus(req.session.userId, parseInt(req.params.viewedId))
+            .then((result) => {
+                // console.log("relation: ", result.rows[0]);
+                if (result.rows[0]) {
+                    res.json(result.rows[0]);
+                } else {
+                    res.json({ noRelation: true });
+                }
+            })
+            .catch((err) => {
+                console.log("err in friendshipStatus: ", err);
+            });
+    }
+);
 
-app.get("/api/friends", (req, res) => {
-    db.findFriends(req.session.userId)
-        .then((result) => {
-            res.json(result.rows);
-        })
-        .catch((err) => {
-            console.log("err in findFriends: ", err);
-            res.json({ error: true });
-        });
-});
+app.get(
+    "/api/friends",
+    (req, res, next) => {
+        if (req.session.userId) {
+            next();
+        } else {
+            res.sendStatus(403);
+        }
+    },
+    (req, res) => {
+        db.findFriends(req.session.userId)
+            .then((result) => {
+                res.json(result.rows);
+            })
+            .catch((err) => {
+                console.log("err in findFriends: ", err);
+                res.json({ error: true });
+            });
+    }
+);
 
 // get friends and friend requests so i dont have to do it manually all the time
 app.get("/easteregg/get/famous", (req, res) => {
@@ -182,39 +232,52 @@ app.get("/logout", (req, res) => {
     res.redirect("/");
 });
 
-app.get("/delete/user", s3.deleteImg, (req, res) => {
-    db.deleteChat(req.session.userId)
-        .then(() => {
-            // console.log("deleted user from chat");
+app.get(
+    "/delete/user",
+    (req, res, next) => {
+        if (req.session.userId) {
+            next();
+        } else {
+            res.sendStatus(403);
+        }
+    },
+    s3.deleteImg,
+    (req, res) => {
+        db.deleteChat(req.session.userId)
+            .then(() => {
+                // console.log("deleted user from chat");
 
-            db.deleteFriendships(req.session.userId)
-                .then(() => {
-                    // console.log("deleted user from friendships");
-                    db.deleteCodes(req.session.email)
-                        .then(() => {
-                            // console.log("deleted user from reset_codes");
-                            db.deleteUser(req.session.userId)
-                                .then(() => {
-                                    // console.log("deleted user from users");
-                                    req.session = null;
-                                    res.redirect("/");
-                                })
-                                .catch((err) => {
-                                    console.log(("err in delete user :", err));
-                                });
-                        })
-                        .catch((err) => {
-                            console.log(("err in delete codes :", err));
-                        });
-                })
-                .catch((err) => {
-                    console.log(("err in delete friendships :", err));
-                });
-        })
-        .catch((err) => {
-            console.log(("err in delete chat :", err));
-        });
-});
+                db.deleteFriendships(req.session.userId)
+                    .then(() => {
+                        // console.log("deleted user from friendships");
+                        db.deleteCodes(req.session.email)
+                            .then(() => {
+                                // console.log("deleted user from reset_codes");
+                                db.deleteUser(req.session.userId)
+                                    .then(() => {
+                                        // console.log("deleted user from users");
+                                        req.session = null;
+                                        res.redirect("/");
+                                    })
+                                    .catch((err) => {
+                                        console.log(
+                                            ("err in delete user :", err)
+                                        );
+                                    });
+                            })
+                            .catch((err) => {
+                                console.log(("err in delete codes :", err));
+                            });
+                    })
+                    .catch((err) => {
+                        console.log(("err in delete friendships :", err));
+                    });
+            })
+            .catch((err) => {
+                console.log(("err in delete chat :", err));
+            });
+    }
+);
 
 ////////////////////////////////////////////////////////
 ////////////////////   POST ROUTES   ///////////////////
@@ -348,38 +411,48 @@ app.post("/password/reset", (req, res) => {
         });
 });
 
-app.post("/friendship/:action/:viewedId", (req, res) => {
-    const action = req.params.action;
-    const viewedId = req.params.viewedId;
-    if (action === "add") {
-        // console.log("run sendFriendRequest");
-        db.sendFriendRequest(req.session.userId, viewedId)
-            .then(() => {
-                res.json({ success: true });
-            })
-            .catch((err) => {
-                console.log("err in sendFriendRequest: ", err);
-            });
-    } else if (action === "remove" || action === "cancel") {
-        // console.log("run deleteRelation");
-        db.deleteRelation(req.session.userId, viewedId)
-            .then(() => {
-                res.json({ success: true });
-            })
-            .catch((err) => {
-                console.log("err in deleteRelation: ", err);
-            });
-    } else {
-        // console.log("run acceptFriendRequest");
-        db.acceptFriendRequest(req.session.userId, viewedId)
-            .then(() => {
-                res.json({ success: true });
-            })
-            .catch((err) => {
-                console.log("err in acceptFriendRequest: ", err);
-            });
+app.post(
+    "/friendship/:action/:viewedId",
+    (req, res, next) => {
+        if (req.session.userId) {
+            next();
+        } else {
+            res.sendStatus(403);
+        }
+    },
+    (req, res) => {
+        const action = req.params.action;
+        const viewedId = req.params.viewedId;
+        if (action === "add") {
+            // console.log("run sendFriendRequest");
+            db.sendFriendRequest(req.session.userId, viewedId)
+                .then(() => {
+                    res.json({ success: true });
+                })
+                .catch((err) => {
+                    console.log("err in sendFriendRequest: ", err);
+                });
+        } else if (action === "remove" || action === "cancel") {
+            // console.log("run deleteRelation");
+            db.deleteRelation(req.session.userId, viewedId)
+                .then(() => {
+                    res.json({ success: true });
+                })
+                .catch((err) => {
+                    console.log("err in deleteRelation: ", err);
+                });
+        } else {
+            // console.log("run acceptFriendRequest");
+            db.acceptFriendRequest(req.session.userId, viewedId)
+                .then(() => {
+                    res.json({ success: true });
+                })
+                .catch((err) => {
+                    console.log("err in acceptFriendRequest: ", err);
+                });
+        }
     }
-});
+);
 
 /////////////////////////////////////////////////////////////////
 //////////////////////    UPLOAD    /////////////////////////////
@@ -404,6 +477,13 @@ const uploader = multer({
 
 app.post(
     "/upload/profile/picture",
+    (req, res, next) => {
+        if (req.session.userId) {
+            next();
+        } else {
+            res.sendStatus(403);
+        }
+    },
     (req, res, next) => {
         db.deleteImage(req.session.userId)
             .then(() => {
@@ -436,15 +516,25 @@ app.post(
     }
 );
 
-app.post("/upload/profile/bio", (req, res) => {
-    db.updateBio(req.session.userId, req.body.bio)
-        .then((result) => {
-            res.json(result.rows[0]);
-        })
-        .catch((err) => {
-            console.log("err in updateBio", err);
-        });
-});
+app.post(
+    "/upload/profile/bio",
+    (req, res, next) => {
+        if (req.session.userId) {
+            next();
+        } else {
+            res.sendStatus(403);
+        }
+    },
+    (req, res) => {
+        db.updateBio(req.session.userId, req.body.bio)
+            .then((result) => {
+                res.json(result.rows[0]);
+            })
+            .catch((err) => {
+                console.log("err in updateBio", err);
+            });
+    }
+);
 
 app.get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "..", "client", "index.html"));

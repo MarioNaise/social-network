@@ -135,6 +135,11 @@ export default class App extends Component {
                                 Chat
                             </Link>
                         </div>
+                        <div>
+                            <a className="link pointer" href="/logout">
+                                Logout
+                            </a>
+                        </div>
                     </nav>
                     <Switch>
                         <Route exact path="/">
@@ -175,7 +180,7 @@ export default class App extends Component {
                     </Switch>
                 </BrowserRouter>
                 <footer className="flexStart">
-                    <p>© Edwin Harmuth</p>
+                    <p>© Edwin Harmuth, 2022</p>
                 </footer>
             </div>
         );
