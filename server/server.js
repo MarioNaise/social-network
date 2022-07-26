@@ -232,52 +232,39 @@ app.get("/logout", (req, res) => {
     res.redirect("/");
 });
 
-app.get(
-    "/delete/user",
-    (req, res, next) => {
-        if (req.session.userId) {
-            next();
-        } else {
-            res.sendStatus(403);
-        }
-    },
-    s3.deleteImg,
-    (req, res) => {
-        db.deleteChat(req.session.userId)
-            .then(() => {
-                // console.log("deleted user from chat");
+app.get("/delete/user", s3.deleteImg, (req, res) => {
+    db.deleteChat(req.session.userId)
+        .then(() => {
+            // console.log("deleted user from chat");
 
-                db.deleteFriendships(req.session.userId)
-                    .then(() => {
-                        // console.log("deleted user from friendships");
-                        db.deleteCodes(req.session.email)
-                            .then(() => {
-                                // console.log("deleted user from reset_codes");
-                                db.deleteUser(req.session.userId)
-                                    .then(() => {
-                                        // console.log("deleted user from users");
-                                        req.session = null;
-                                        res.redirect("/");
-                                    })
-                                    .catch((err) => {
-                                        console.log(
-                                            ("err in delete user :", err)
-                                        );
-                                    });
-                            })
-                            .catch((err) => {
-                                console.log(("err in delete codes :", err));
-                            });
-                    })
-                    .catch((err) => {
-                        console.log(("err in delete friendships :", err));
-                    });
-            })
-            .catch((err) => {
-                console.log(("err in delete chat :", err));
-            });
-    }
-);
+            db.deleteFriendships(req.session.userId)
+                .then(() => {
+                    // console.log("deleted user from friendships");
+                    db.deleteCodes(req.session.email)
+                        .then(() => {
+                            // console.log("deleted user from reset_codes");
+                            db.deleteUser(req.session.userId)
+                                .then(() => {
+                                    // console.log("deleted user from users");
+                                    req.session = null;
+                                    res.redirect("/");
+                                })
+                                .catch((err) => {
+                                    console.log(("err in delete user :", err));
+                                });
+                        })
+                        .catch((err) => {
+                            console.log(("err in delete codes :", err));
+                        });
+                })
+                .catch((err) => {
+                    console.log(("err in delete friendships :", err));
+                });
+        })
+        .catch((err) => {
+            console.log(("err in delete chat :", err));
+        });
+});
 
 ////////////////////////////////////////////////////////
 ////////////////////   POST ROUTES   ///////////////////
@@ -478,13 +465,6 @@ const uploader = multer({
 app.post(
     "/upload/profile/picture",
     (req, res, next) => {
-        if (req.session.userId) {
-            next();
-        } else {
-            res.sendStatus(403);
-        }
-    },
-    (req, res, next) => {
         db.deleteImage(req.session.userId)
             .then(() => {
                 next();
@@ -516,25 +496,15 @@ app.post(
     }
 );
 
-app.post(
-    "/upload/profile/bio",
-    (req, res, next) => {
-        if (req.session.userId) {
-            next();
-        } else {
-            res.sendStatus(403);
-        }
-    },
-    (req, res) => {
-        db.updateBio(req.session.userId, req.body.bio)
-            .then((result) => {
-                res.json(result.rows[0]);
-            })
-            .catch((err) => {
-                console.log("err in updateBio", err);
-            });
-    }
-);
+app.post("/upload/profile/bio", (req, res) => {
+    db.updateBio(req.session.userId, req.body.bio)
+        .then((result) => {
+            res.json(result.rows[0]);
+        })
+        .catch((err) => {
+            console.log("err in updateBio", err);
+        });
+});
 
 app.get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "..", "client", "index.html"));
